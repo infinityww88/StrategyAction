@@ -12,6 +12,7 @@ namespace Strategy {
 			if (unit.config.idleClip != null) {
 				unit.animancer.Play(unit.config.idleClip);
 			}
+			unit.AgentStop();
 		}
 		
 		// This function is called when the behaviour becomes disabled () or inactive.

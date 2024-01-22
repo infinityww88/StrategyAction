@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ProjectDawn.Navigation.Hybrid;
 using System.Linq;
 using Unity.Assertions;
 
@@ -18,14 +17,14 @@ namespace Strategy {
 				unit.animancer.Play(unit.config.moveClip);
 			}
 			lastTime = Time.time;
-			unit.agent.SetDestination(GetDestination());
+			unit.AgentWake();
+			unit.SetAgentDestination(GetDestination());
 		}
 		
 		// This function is called when the behaviour becomes disabled () or inactive.
 		protected void OnDisable()
 		{
 			unit.animancer.Stop();
-			unit.agent.Stop();
 		}
 		
 		protected virtual Vector3 GetDestination() {
@@ -38,14 +37,14 @@ namespace Strategy {
 			
 			Assert.IsTrue(unit.TeamId == 1, "no enemies for own team to chase");
 			
-			return GameController.Instance.BaseTower.position;	
+			return GameController.Instance.BaseTower.position;
 		}
 		
 		// Update is called every frame, if the MonoBehaviour is enabled.
 		protected void Update()
 		{
 			if (Time.time - lastTime >= unit.config.refreshTargetInterval) {
-				unit.agent.SetDestination(GetDestination());
+				unit.SetAgentDestination(GetDestination());
 				lastTime = Time.time;
 			}
 		}

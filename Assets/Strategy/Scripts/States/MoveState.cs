@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using ProjectDawn.Navigation.Hybrid;
 
 namespace Strategy {
 	
@@ -18,7 +17,8 @@ namespace Strategy {
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{
-			unit.agent.SetDestination(unit.TargetPos);
+			unit.AgentWake();
+			unit.SetAgentDestination(unit.TargetPos);
 			lastMonitorTime = Time.time;
 			lastMonitorPos = transform.position;
 			if (unit.config.moveClip != null) {
@@ -31,28 +31,18 @@ namespace Strategy {
 		{
 			unit.animancer.Stop();
 		}
-    
-		void CheckStuck() {
-			float posDelta = (transform.position - lastMonitorPos).magnitude;
-			if (posDelta < stuckPosDelta) {
-				// Event Stuck
-			} else {
-				lastMonitorTime = Time.time;
-				lastMonitorPos = transform.position;
-			}
-		}
 		
 		// Update is called every frame, if the MonoBehaviour is enabled.
 		protected void Update()
 		{
 			if ((Time.time - lastMonitorTime) > monitorInterval) {
-				float posDelta = (transform.position - lastMonitorPos).magnitude;
-				if (posDelta < stuckPosDelta) {
+				//float posDelta = (transform.position - lastMonitorPos).magnitude;
+				if (unit.IsStuck(unit.TargetPos)) {
 					// Event Stuck
 					unit.ClearMoveTarget();
 				} else {
 					lastMonitorTime = Time.time;
-					lastMonitorPos = transform.position;
+					//lastMonitorPos = transform.position;
 				}
 			}
 		}

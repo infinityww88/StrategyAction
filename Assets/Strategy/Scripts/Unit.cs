@@ -7,6 +7,7 @@ using Animancer;
 using DG.Tweening;
 using System;
 using System.Linq;
+using UnityEngine.AI;
 
 namespace Strategy {
 	
@@ -20,7 +21,9 @@ namespace Strategy {
 		public int TeamId => teamId;
 		
 		public AnimancerComponent animancer;
-		public AgentAuthoring agent;
+		//public AgentAuthoring agent;
+		private NavMeshAgent agent;
+		private NavMeshObstacle obstacle;
 		
 		public Vector3 Destination { get; set; }
 		
@@ -46,6 +49,8 @@ namespace Strategy {
 		public Vector3 TargetPos => targetPos;
 		
 		public float hp;
+		
+		public float stuckPosDelta = 0.5f;
 	
 		public enum EState {
 			Idle,
@@ -57,7 +62,8 @@ namespace Strategy {
 		
 		void Awake() {
 			animancer = GetComponentInChildren<AnimancerComponent>();
-			agent = GetComponent<AgentAuthoring>();
+			agent = GetComponent<NavMeshAgent>();
+			obstacle = GetComponent<NavMeshObstacle>();
 			
 			idleState = GetComponent<IdleState>();
 			chaseState = GetComponent<ChaseState>();
@@ -153,6 +159,30 @@ namespace Strategy {
 		protected void Start()
 		{
 			hp = config.maxHp;
+		}
+		
+		public void AgentStop() {
+			agent.Stop();
+			agent.enabled = false;
+			obstacle.enabled = true;
+		}
+		
+		public void AgentWake() {
+			agent.enabled = true;
+			obstacle.enabled = false;
+		}
+		
+		public void DisableNav() {
+			agent.enabled = false;
+			obstacle.enabled = false;
+		}
+		
+		public void SetAgentDestination(Vector3 dest) {
+			agent.destination = dest;
+		}
+		
+		public bool IsStuck(Vector3 dest) {
+			return !agent.hasPath || (agent.pathEndPosition - dest).XZ().magnitude >= stuckPosDelta;
 		}
 		
 		void Update() {

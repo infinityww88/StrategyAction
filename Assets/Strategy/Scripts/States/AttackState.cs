@@ -18,6 +18,7 @@ namespace Strategy {
 		protected void OnEnable()
 		{
 			Assert.IsTrue(Util.GetLiveUnits(unit.GetEnemiesInAttackRange()).Count() > 0, "No enemies in attack state");
+			unit.AgentStop();
 			GetTarget();
 			if (target != null) {
 				LookAtTarget();

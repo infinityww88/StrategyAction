@@ -17,7 +17,7 @@ namespace Strategy {
 		
 		public static Unit GetNearest(Vector3 center,
 			IEnumerable<Unit> units) {
-				return units.OrderBy(e => (e.transform.position - center).magnitude)
+				return units.OrderBy(e => (e.transform.position - center).XZ().magnitude)
 					.FirstOrDefault();
 			}
 		
@@ -39,7 +39,7 @@ namespace Strategy {
 		{
 			return GameController.Instance.GetTeam(teamId)
 				.Where(e => {
-					float d = (e.transform.position - center).magnitude;
+					float d = (e.transform.position - center).XZ().magnitude;
 					if (d < minRadius || d >= maxRadius) {
 						return false;
 					}
