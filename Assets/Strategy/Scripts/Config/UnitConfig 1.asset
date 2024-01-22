@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 100
   skillCD: 0
   attackMinRadius: 0
-  attackMaxRadius: 4.8
+  attackMaxRadius: 4.71
   chaseRadius: 25.24
   attackPeriod: 2
   attackTimePercent: 2
