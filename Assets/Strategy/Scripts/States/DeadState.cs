@@ -12,7 +12,8 @@ namespace Strategy {
 			if (unit.config.deadClip != null) {
 				unit.animancer.Play(unit.config.deadClip);
 			}
-			unit.DisableNav();
+			unit.AgentStop();
+			unit.RestoreNavMesh();
 		}
 	
 		// This function is called when the behaviour becomes disabled () or inactive.

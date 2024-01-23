@@ -686,6 +686,92 @@ Transform:
   - {fileID: 2050405864}
   m_Father: {fileID: 1438952695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &624471591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 624471593}
+  - component: {fileID: 624471592}
+  m_Layer: 0
+  m_Name: AStar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &624471592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624471591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78396926cbbfc4ac3b48fc5fc34a87d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  data:
+    dataString: UEsDBBQAAAgIAABAIezhlsIN7QEAANIDAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1U01z2jAQ/SuMzw0D/gDSYwmTHgp0cA6ZZHpYpLWtiSxRWQICw3/vyh/gTJqTrLf73mrfrs8BK8AAs2g2wIWrgu+D8TD5NgiYVlY7s4TjwhhtCA89ilKm4oR0HdVpB5BvsJX4E0Ve2DarA+dSlNtragnHVOqd50aj5r7gOf5CldvCM2tQqA3mQqu2SkQYcmG1eRISW3Aczgi2LfD8CXm5Iq5Cz/NtWeOQEIMS96Dso4FdkTqTAcOl5l42eNArbTf41wmDgc+FiowhwbmWUnA0XicDWWE/uMSq+FChCzyhMSDU/yIG+wzWym+6+ANaENJ30RhVvdH3eRDsQTr/0kk8uPh+IV82sdc//trUS6HcXa3y/hltwZKljcbRD4TQ9/Y8+bOWy7RhyH9op3g1R0VynxnhcBYnyTSaTL6ktpVbYjjqqMlwGk+j+/G0ZVKk5laFPngP185KofBmiw+saDRzrRQy30Hf/47WzvBGUwgGK5vSwYq1ku/PLz0aKr+ZK9iXxJ07a4XKb9zcCf7R6mCbxCzMZsl9gnwKLLqLYBuy8XjGJvE2mfFRUHchlLAC5G/Sl7bzlra9N34FZa24QUaDHtQb6NeMGzg8ilOpeyshVKZTRmui1o3GtW1aEJBkMV/Uv0WKdQueGpwvweUfUEsDBBQAAAgIAABAIeyHCw4ObwAAAHoAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jO01FFQSi9KLMgoBooYgjilmSkgdrRSkqlJslGahamlaWqKeWKysa5xYpJRsqGhRbKZSZKpRYqBUixQfUllQapfYm4qRE9AYklGWmZeSmZeul5QanJicYk7yHCl2FoAUEsBAi0AFAAACAgAAEAh7OGWwg3tAQAA0gMAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAAEAh7IcLDg5vAAAAegAAAAkAJAAAAAAAAAAAAAAAOgIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAAD0AgAAAAA=
+    file_cachedStartup: {fileID: 0}
+    cacheStartup: 0
+  showNavGraphs: 1
+  showUnwalkableNodes: 1
+  debugMode: 0
+  debugFloor: 0
+  debugRoof: 1
+  manualDebugFloorRoof: 0
+  showSearchTree: 0
+  unwalkableNodeDebugSize: 0.3
+  logPathResults: 1
+  maxNearestNodeDistance: 100
+  scanOnStartup: 1
+  fullGetNearestSearch: 0
+  prioritizeGraphs: 0
+  prioritizeGraphsLimit: 1
+  colorSettings:
+    _SolidColor: {r: 0.11764706, g: 0.4, b: 0.7882353, a: 0.9}
+    _UnwalkableNode: {r: 1, g: 0, b: 0, a: 0.5}
+    _BoundsHandles: {r: 0.29, g: 0.454, b: 0.741, a: 0.9}
+    _ConnectionLowLerp: {r: 0, g: 1, b: 0, a: 0.5}
+    _ConnectionHighLerp: {r: 1, g: 0, b: 0, a: 0.5}
+    _MeshEdgeColor: {r: 0, g: 0, b: 0, a: 0.5}
+    _AreaColors: []
+  tagNames: []
+  heuristic: 2
+  heuristicScale: 1
+  threadCount: 1
+  maxFrameTime: 10
+  batchGraphUpdates: 0
+  graphUpdateBatchingInterval: 0.2
+  navmeshUpdates:
+    updateInterval: 0
+  euclideanEmbedding:
+    mode: 0
+    seed: 0
+    pivotPointRoot: {fileID: 0}
+    spreadOutCount: 1
+  showGraphs: 1
+--- !u!4 &624471593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624471591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &624777693
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,9 +1094,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 0744cd7448fd64b4893b4cdac116640d, type: 2}
   teamId: 1
   animancer: {fileID: 0}
-  agent: {fileID: 0}
   attackSpeed: 1
   hp: 0
+  stuckPosDelta: 0.5
 --- !u!114 &741280404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1259,9 +1345,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 7dd6cad930bd66945bdfb7e1e0f4ef3e, type: 2}
   teamId: 0
   animancer: {fileID: 0}
-  agent: {fileID: 0}
   attackSpeed: 2
   hp: 0
+  stuckPosDelta: 0.5
 --- !u!114 &783348058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1611,9 +1697,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 32c90524e3b24dc44a05d9db4aba2eda, type: 2}
   teamId: 0
   animancer: {fileID: 0}
-  agent: {fileID: 0}
   attackSpeed: 0.5
   hp: 0
+  stuckPosDelta: 0.5
 --- !u!114 &940776356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2090,9 +2176,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 0744cd7448fd64b4893b4cdac116640d, type: 2}
   teamId: 1
   animancer: {fileID: 0}
-  agent: {fileID: 0}
   attackSpeed: 1
   hp: 0
+  stuckPosDelta: 0.5
 --- !u!114 &1061489986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3849,9 +3935,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 7dd6cad930bd66945bdfb7e1e0f4ef3e, type: 2}
   teamId: 0
   animancer: {fileID: 0}
-  agent: {fileID: 0}
   attackSpeed: 1
   hp: 0
+  stuckPosDelta: 0.5
 --- !u!114 &7809862999417621907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4096,9 +4182,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 0744cd7448fd64b4893b4cdac116640d, type: 2}
   teamId: 1
   animancer: {fileID: 0}
-  agent: {fileID: 0}
   attackSpeed: 1
   hp: 0
+  stuckPosDelta: 0.5
 --- !u!114 &8195072208302935464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4211,3 +4297,4 @@ SceneRoots:
   - {fileID: 6624131903820557895}
   - {fileID: 783348070}
   - {fileID: 940776368}
+  - {fileID: 624471593}

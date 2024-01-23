@@ -15,11 +15,11 @@ MonoBehaviour:
   maxHp: 100
   skillCD: 0
   attackMinRadius: 0
-  attackMaxRadius: 6.32
+  attackMaxRadius: 5
   chaseRadius: 1000
   attackPeriod: 2
   attackTimePercent: 2
-  refreshTargetInterval: 0
+  refreshTargetInterval: 0.2
   findEnemiesPolicy: 2
   idleClip: {fileID: 7400000, guid: c50f777db5f8c8e4ebc25faab6c74261, type: 2}
   moveClip: {fileID: 7400000, guid: 9a55de757bdee924c87c79921564178f, type: 2}

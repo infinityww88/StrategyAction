@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Pathfinding;
 
 namespace Strategy {
 	
@@ -57,6 +58,28 @@ namespace Strategy {
 		
 		public static Vector2 XZ(this Vector3 self) {
 			return new Vector2(self.x, self.z);
+		}
+		
+		public static float XZDistance(Vector3 a, Vector3 b) {
+			return (a - b).XZ().magnitude;
+		}
+		
+		public static void DrawPathGizmos(List<Vector3> path, Color color) {
+			Gizmos.color = color;
+			for (int i = 0; i < path.Count - 1; i++) {
+				Gizmos.DrawLine(path[i], path[i+1]);
+			}
+			
+			for (int i = 0; i < path.Count; i++) {
+				if (i == 0) {
+					Gizmos.color = Color.green;
+				} else if (i == path.Count - 1) {
+					Gizmos.color = Color.blue;
+				} else {
+					Gizmos.color = Color.red;
+				}
+				Gizmos.DrawSphere(path[i], 0.3f);
+			}
 		}
 	}
 }

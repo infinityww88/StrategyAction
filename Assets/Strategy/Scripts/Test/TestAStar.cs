@@ -8,40 +8,37 @@ namespace Strategy {
 	
 	public class TestAStar : MonoBehaviour
 	{
-		public Transform targetPos;
-	
+		public Transform pos0;
+		public Transform pos1;
+		private Path path;
 		private Seeker seeker;
-		private RichAI richAI;
-		private NavmeshCut navmeshCut;
-	
-		public float reachRadius = 0.1f;
-	
-		// Start is called before the first frame update
-		void Start()
+		
+		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
+		protected void Start()
 		{
 			seeker = GetComponent<Seeker>();
-			richAI = GetComponent<RichAI>();
-			navmeshCut = GetComponent<NavmeshCut>();
 		}
-
-		[Button]
-		void StartPath() {
-			seeker.StartPath(transform.position, targetPos.position, OnPathComplete);
-		}
-	
-		void OnPathComplete(Path path) {
 		
-		}
-	
-		// Update is called every frame, if the MonoBehaviour is enabled.
-		protected void Update()
+		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
+		protected void OnDrawGizmos()
 		{
-			if ((transform.position - targetPos.position).XZ().magnitude < reachRadius) {
-				richAI.isStopped = true;
-				richAI.enabled = false;
-				seeker.enabled = false;
-				navmeshCut.enabled = true;
+			if (path != null) {
+				Util.DrawPathGizmos(path.vectorPath, Color.red);
 			}
+		}
+		
+		void OnPathComplete(Path path) {
+			this.path = path;
+		}
+		
+		[Button]
+		void Test() {
+			seeker.StartPath(transform.position, pos1.position, OnPathComplete);
+		}
+		
+		[Button]
+		void TestReverse() {
+			seeker.StartPath(pos1.position, pos0.position, OnPathComplete);
 		}
 	}
 }

@@ -19,6 +19,7 @@ namespace Strategy {
 		{
 			Assert.IsTrue(Util.GetLiveUnits(unit.GetEnemiesInAttackRange()).Count() > 0, "No enemies in attack state");
 			unit.AgentStop();
+			unit.CutNavmesh();
 			GetTarget();
 			if (target != null) {
 				LookAtTarget();
@@ -28,16 +29,16 @@ namespace Strategy {
 			}
 		}
 		
+		public void Attack() {
+			
+		}
+		
 		// This function is called when the behaviour becomes disabled () or inactive.
 		protected void OnDisable()
 		{
 			if (unit.config.attackClip != null) {
 				unit.animancer.Stop();	
 			}
-		}
-		
-		public void Attack() {
-			Debug.Log($"{gameObject.name} attack");
 		}
 		
 		private void GetTarget() {
@@ -58,13 +59,18 @@ namespace Strategy {
 			}
 		}
 		
+		public bool PeriodEnd { get; set; }
+		
 		// Update is called every frame, if the MonoBehaviour is enabled.
 		protected void Update()
 		{
 			unit.animancer.States.Current.Speed = unit.attackSpeed;
 			if (currState.NormalizedTime < 1) {
+				PeriodEnd = false;
 				return;
 			}
+			
+			PeriodEnd = true;
 			
 			GetTarget();
 			

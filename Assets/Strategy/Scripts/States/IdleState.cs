@@ -13,6 +13,7 @@ namespace Strategy {
 				unit.animancer.Play(unit.config.idleClip);
 			}
 			unit.AgentStop();
+			unit.CutNavmesh();
 		}
 		
 		// This function is called when the behaviour becomes disabled () or inactive.

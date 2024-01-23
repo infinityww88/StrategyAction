@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Sirenix.OdinInspector;
+using MEC;
 
 namespace Strategy {
 	
@@ -29,6 +30,10 @@ namespace Strategy {
 			Debug.Log($"start hasPath {agent.hasPath} {Time.frameCount}");
 			lastTime = Time.time;
 		}
+		
+		//IEnumerator<float> Task() {
+			
+		//}
 		
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
 		protected void OnDrawGizmos()
