@@ -54,7 +54,7 @@ namespace Strategy {
 		private IEnumerator<float> MonitorStuck() {
 			while (true) {
 				yield return Timing.WaitForSeconds(stuckMonitorInterval);
-				if ((transform.position - dest).XZ().magnitude < stuckPosDelta) {
+				if (Util.XZDistance(transform.position, dest) < stuckPosDelta) {
 					Debug.Log($"clear move: stuck {transform.position} {dest}");
 					unit.ClearMoveTarget();
 					break;
@@ -65,7 +65,7 @@ namespace Strategy {
 		// Update is called every frame, if the MonoBehaviour is enabled.
 		protected void Update()
 		{
-			if ((transform.position - dest).XZ().magnitude < 0.2f) {
+			if (Util.XZDistance(transform.position, dest) < 0.2f) {
 				Debug.Log($"clear move: reach target {dest}");
 				unit.ClearMoveTarget();
 			}

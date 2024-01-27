@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using ProjectDawn.Navigation.Hybrid;
+using ProjectDawn.Navigation;
 using Animancer;
 using DG.Tweening;
 using System;
 using System.Linq;
 
 namespace Strategy {
+	
+	[System.Flags]
+	public enum UnitLayer {
+		None = 0,
+		Ground = 1 << 0,
+		Sky = 1 << 1,
+		ALL = -1
+	}
 	
 	public class Unit : MonoBehaviour
 	{
@@ -49,6 +58,9 @@ namespace Strategy {
 		public float hp;
 		
 		public float stuckPosDelta = 0.5f;
+		
+		public UnitLayer attackLayers;
+		public UnitLayer unitLayer;
 	
 		public enum EState {
 			Idle,
@@ -109,7 +121,8 @@ namespace Strategy {
 					transform.position,
 					config.attackMinRadius,
 					config.attackMaxRadius,
-					Util.EnemyTeamId(TeamId)));
+					Util.EnemyTeamId(TeamId),
+					attackLayers));
 		}
 		
 		void UpdateChaseEnemies() {
@@ -119,7 +132,8 @@ namespace Strategy {
 				transform.position,
 				config.attackMaxRadius,
 				config.chaseRadius,
-				Util.EnemyTeamId(TeamId)));
+				Util.EnemyTeamId(TeamId),
+				attackLayers));
 		}
 		
 		void SwitchState(UnitState newState) {

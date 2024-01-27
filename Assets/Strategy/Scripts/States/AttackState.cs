@@ -77,17 +77,17 @@ namespace Strategy {
 		
 		private Unit GetTarget(Unit currTarget) {
 			if (currTarget != null && !currTarget.IsDead) {
-				float d = (currTarget.transform.position - transform.position).XZ().magnitude;
+				float d = Util.XZDistance(currTarget.transform.position, transform.position);
 				if (d >= unit.config.attackMinRadius && d < unit.config.attackMaxRadius) {
-					return target;
+					return currTarget;
 				}
 			}
 			var targets = Util.GetLiveUnits(unit.GetEnemiesInAttackRange());
 			if (targets.Count() == 0) {
 				return null;
 			}
-			target = Util.GetNearest(transform.position, targets.Where(e => !e.IsDead));
-			return target;
+			currTarget = Util.GetNearest(transform.position, targets.Where(e => !e.IsDead));
+			return currTarget;
 		}
 		
 		public bool InAttack { get; set; }
@@ -97,11 +97,13 @@ namespace Strategy {
 			while (true) {
 				var lookv = target.transform.position - body.position;
 				lookv.y = 0;
-				float angle = Vector3.Angle(body.forward, lookv);
+				var forward = body.forward;
+				forward.y = 0;
+				float angle = Vector3.Angle(forward, lookv);
 				if (angle < 1)  {
 					break;
 				}
-				lookv = Vector3.Lerp(body.forward, lookv, 0.01f).normalized;
+				lookv = Vector3.Lerp(forward, lookv, 0.01f).normalized;
 				body.LookAt(body.position + lookv, Vector3.up);
 				yield return Timing.WaitForOneFrame;
 			}

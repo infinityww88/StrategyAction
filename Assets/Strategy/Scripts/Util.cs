@@ -21,29 +21,35 @@ namespace Strategy {
 		
 		public static Unit GetNearest(Vector3 center,
 			IEnumerable<Unit> units) {
-				return units.OrderBy(e => (e.transform.position - center).XZ().magnitude)
+				return units.OrderBy(e => Util.XZDistance(e.transform.position, center))
 					.FirstOrDefault();
 			}
 		
 		public static Unit GetNearestEnemy(int teamId,
 			Vector3 pos,
 			float minRadius,
-			float maxRadius) {
+			float maxRadius,
+			UnitLayer layers) {
 				return Util.GetNearest(pos,
 					GetUnits(pos,
 					minRadius,
 					maxRadius,
-					(teamId + 1) % 2));
+					(teamId + 1) % 2,
+					layers));
 			}
 		
 		public static IEnumerable<Unit> GetUnits(Vector3 center,
 			float minRadius,
 			float maxRadius,
-			int teamId)
+			int teamId,
+			UnitLayer layers = UnitLayer.ALL)
 		{
 			return GameController.Instance.GetTeam(teamId)
 				.Where(e => {
-					float d = (e.transform.position - center).XZ().magnitude;
+					if ((e.unitLayer & layers) == 0) {
+						return false;
+					}
+					float d = Util.XZDistance(e.transform.position, center);
 					if (d < minRadius || d >= maxRadius) {
 						return false;
 					}
