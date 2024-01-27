@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ProjectDawn.Navigation.Hybrid;
 
 namespace Strategy {
 	
@@ -9,11 +10,11 @@ namespace Strategy {
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{
+			unit.StopAgent();
+			unit.GetComponent<AgentAuthoring>().enabled = false;
 			if (unit.config.deadClip != null) {
 				unit.animancer.Play(unit.config.deadClip);
 			}
-			unit.AgentStop();
-			unit.RestoreNavMesh();
 		}
 	
 		// This function is called when the behaviour becomes disabled () or inactive.

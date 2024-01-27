@@ -14,6 +14,7 @@ namespace Strategy {
 		void OnEnable()
 		{
 			startTime = Time.time;
+			unit.StopAgent();
 			if (unit.config.idleClip) {
 				unit.animancer.Play(unit.config.idleClip);
 			}

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Pathfinding;
+using ProjectDawn.Navigation.Hybrid;
+using MEC;
+using System;
 
 namespace Strategy {
 	
@@ -80,6 +83,19 @@ namespace Strategy {
 				}
 				Gizmos.DrawSphere(path[i], 0.3f);
 			}
+		}
+		
+		public static IEnumerator<float> AlignAgentRotation(Transform body, Func<Vector3> velocityProvider) {
+			while (true) {
+				var vel = velocityProvider();
+				vel.y = 0;
+				var forward = body.forward;
+				forward.y = 0;
+				var dir = Vector3.Lerp(forward, vel, 0.01f);
+				body.LookAt(body.position + dir, Vector3.up);
+				yield return Timing.WaitForOneFrame;
+			}
+			
 		}
 	}
 }

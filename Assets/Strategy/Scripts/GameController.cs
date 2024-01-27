@@ -10,6 +10,8 @@ namespace Strategy {
 	{
 		public static GameController Instance { get; set; }
 		
+		public float bottomLine = 100f;
+		
 		public Transform baseTower;
 	
 		public enum EState {
@@ -62,6 +64,13 @@ namespace Strategy {
 					team1Units.Add(u);
 				}
 			}
+		}
+		
+		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
+		protected void OnDrawGizmos()
+		{
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine(new Vector3(-200, 1, bottomLine), new Vector3(200, 1, bottomLine));
 		}
 	}
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   skillCD: 0
-  attackMinRadius: 0
+  attackMinRadius: 11.7
   attackMaxRadius: 59.37
   chaseRadius: 1000
   attackPeriod: 2

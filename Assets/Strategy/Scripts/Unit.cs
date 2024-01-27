@@ -7,8 +7,6 @@ using Animancer;
 using DG.Tweening;
 using System;
 using System.Linq;
-using Pathfinding;
-using Pathfinding.RVO;
 
 namespace Strategy {
 	
@@ -16,15 +14,14 @@ namespace Strategy {
 	{
 		public UnitConfig config;
 		
+		private AgentAuthoring agent;
+		
 		[SerializeField]
 		private int teamId = 0;
 		
 		public int TeamId => teamId;
 		
 		public AnimancerComponent animancer;
-		private Seeker seeker;
-		private AIPath richAI;
-		private NavmeshCut navmeshCut;
 		
 		public Vector3 Destination { get; set; }
 		
@@ -63,9 +60,8 @@ namespace Strategy {
 		
 		void Awake() {
 			animancer = GetComponentInChildren<AnimancerComponent>();
-			seeker = GetComponent<Seeker>();
-			richAI = GetComponent<AIPath>();
-			navmeshCut = GetComponent<NavmeshCut>();
+			
+			agent = GetComponent<AgentAuthoring>();
 			
 			idleState = GetComponent<IdleState>();
 			chaseState = GetComponent<ChaseState>();
@@ -83,6 +79,10 @@ namespace Strategy {
 			get {
 				return hp <= 0;
 			}
+		}
+		
+		public Vector3 GetAgentVelocity() {
+			return agent.EntityBody.Velocity;
 		}
 		
 		public List<Unit> GetEnemiesInAttackRange() {
@@ -143,12 +143,6 @@ namespace Strategy {
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
 		protected void OnDrawGizmos()
 		{
-			if (richAI != null && richAI.hasPath) {
-				remainPath.Clear();
-				richAI.GetRemainingPath(remainPath, out var stale);
-				Util.DrawPathGizmos(remainPath, Color.blue);
-			}
-			
 			DebugExtension.DrawCylinder(transform.position,
 				transform.position + Vector3.up * 2, 
 				Color.red,
@@ -171,32 +165,13 @@ namespace Strategy {
 			hp = config.maxHp;
 		}
 		
-		public void AgentStop() {
-			richAI.isStopped = true;
-			//seeker.enabled = false;
-			richAI.enabled = false;
-			//GetComponent<RVOController>().enabled = false;
+		
+		public void SetDestination(Vector3 dest) {
+			agent.SetDestination(dest);
 		}
 		
-		public void CutNavmesh() {
-			navmeshCut.enabled = true;
-		}
-		
-		public void RestoreNavMesh() {
-			navmeshCut.enabled = false;
-		}
-		
-		public void AgentWake() {
-			RestoreNavMesh();
-			//seeker.enabled = true;
-			richAI.enabled = true;
-			richAI.isStopped = false;
-			//GetComponent<RVOController>().enabled = true;
-		}
-		
-		public void SetAgentDestination(Vector3 dest, OnPathDelegate onPathComplete = null) {
-			Vector3 offset = dest - transform.position;
-			seeker.StartPath(transform.position + offset.normalized * 0.1f, dest, onPathComplete);
+		public void StopAgent() {
+			agent.Stop();
 		}
 
 		void Update() {
@@ -222,7 +197,7 @@ namespace Strategy {
 				else {
 					UpdateChaseEnemies();
 					var s = currState as AttackState;
-					if (s != null && !s.PeriodEnd) {
+					if (s != null && s.InAttack) {
 						return;
 					}
 					if (Util.GetLiveUnits(enemiesInChaseRange).Count() > 0 || TeamId == 1) {
