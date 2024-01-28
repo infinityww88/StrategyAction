@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2162a863fd65ca6428e613139b339948, type: 3}
-  m_Name: UnitConfig_Cannon
+  m_Name: UnitConfig_Spaceshp
   m_EditorClassIdentifier: 
   maxHp: 100
   skillCD: 0
-  attackMinRadius: 11.7
-  attackMaxRadius: 59.37
+  attackMinRadius: 0
+  attackMaxRadius: 12.22
   chaseRadius: 1000
   attackPeriod: 2
   attackTimePercent: 2
@@ -25,4 +25,4 @@ MonoBehaviour:
   moveClip: {fileID: 0}
   attackClip: {fileID: 0}
   skillClip: {fileID: 0}
-  deadClip: {fileID: 0}
+  deadClip: {fileID: 7400000, guid: 49dfc8ec1359b3245bc298e9cc19b2c2, type: 2}

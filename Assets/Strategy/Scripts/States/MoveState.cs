@@ -17,7 +17,6 @@ namespace Strategy {
 		
 		private CoroutineHandle targetUpadteHandle;
 		private CoroutineHandle stuckMonitorHandle;
-		private CoroutineHandle alignVelocityHandle;
 		
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
@@ -27,8 +26,6 @@ namespace Strategy {
 			}
 			targetUpadteHandle = Timing.RunCoroutine(MoveToTarget().CancelWith(gameObject));
 			stuckMonitorHandle = Timing.RunCoroutine(MonitorStuck().CancelWith(gameObject));
-			alignVelocityHandle = Timing.RunCoroutine(Util.AlignAgentRotation(
-				unit.animancer.transform, unit.GetAgentVelocity).CancelWith(gameObject));
 		}
 		
 		// This function is called when the behaviour becomes disabled () or inactive.
@@ -37,7 +34,6 @@ namespace Strategy {
 			unit.animancer.Stop();
 			Timing.KillCoroutines(targetUpadteHandle);
 			Timing.KillCoroutines(stuckMonitorHandle);
-			Timing.KillCoroutines(alignVelocityHandle);
 		}
 		
 		private Vector3 dest;

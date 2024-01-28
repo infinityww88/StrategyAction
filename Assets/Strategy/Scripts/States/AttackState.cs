@@ -22,7 +22,6 @@ namespace Strategy {
 		{
 			Assert.IsTrue(Util.GetLiveUnits(unit.GetEnemiesInAttackRange()).Count() > 0, "No enemies in attack state");
 			unit.StopAgent();
-			
 			handle = Timing.RunCoroutine(StartAttack().CancelWith(gameObject));
 		}
 		
@@ -103,7 +102,7 @@ namespace Strategy {
 				if (angle < 1)  {
 					break;
 				}
-				lookv = Vector3.Lerp(forward, lookv, 0.01f).normalized;
+				lookv = Vector3.Lerp(forward, lookv, 0.2f).normalized;
 				body.LookAt(body.position + lookv, Vector3.up);
 				yield return Timing.WaitForOneFrame;
 			}

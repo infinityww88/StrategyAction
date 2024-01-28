@@ -11,7 +11,6 @@ namespace Strategy {
 	public class ChaseState : UnitState
 	{
 		private CoroutineHandle handle;
-		private CoroutineHandle alignVelocityHandle;
 		
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
@@ -20,8 +19,6 @@ namespace Strategy {
 				unit.animancer.Play(unit.config.moveClip);
 			}
 			handle = Timing.RunCoroutine(SetTarget().CancelWith(gameObject));
-			alignVelocityHandle = Timing.RunCoroutine(Util.AlignAgentRotation(
-				unit.animancer.transform, unit.GetAgentVelocity).CancelWith(gameObject));
 		}
 		
 		private Vector3 targetPos;
@@ -71,7 +68,6 @@ namespace Strategy {
 		{
 			unit.animancer.Stop();
 			Timing.KillCoroutines(handle);
-			Timing.KillCoroutines(alignVelocityHandle);
 		}
 		
 		protected virtual Unit GetTarget(Unit currTarget) {

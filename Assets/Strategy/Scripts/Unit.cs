@@ -8,6 +8,7 @@ using Animancer;
 using DG.Tweening;
 using System;
 using System.Linq;
+using MEC;
 
 namespace Strategy {
 	
@@ -61,6 +62,9 @@ namespace Strategy {
 		
 		public UnitLayer attackLayers;
 		public UnitLayer unitLayer;
+		
+		private CoroutineHandle alignVelocityHandle;
+		private CoroutineHandle alignPositionHandle;
 	
 		public enum EState {
 			Idle,
@@ -71,7 +75,7 @@ namespace Strategy {
 		}
 		
 		void Awake() {
-			animancer = GetComponentInChildren<AnimancerComponent>();
+			//animancer = GetComponentInChildren<AnimancerComponent>();
 			
 			agent = GetComponent<AgentAuthoring>();
 			
@@ -94,6 +98,9 @@ namespace Strategy {
 		}
 		
 		public Vector3 GetAgentVelocity() {
+			if (!agent.HasEntityBody || agent.EntityBody.IsStopped) {
+				return Vector3.zero;
+			}
 			return agent.EntityBody.Velocity;
 		}
 		
@@ -157,17 +164,17 @@ namespace Strategy {
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
 		protected void OnDrawGizmos()
 		{
-			DebugExtension.DrawCylinder(transform.position,
-				transform.position + Vector3.up * 2, 
+			DebugExtension.DrawCircle(transform.position + Vector3.up * 0.1f,
+				Vector3.up, 
 				Color.red,
 				config.attackMinRadius);
-			DebugExtension.DrawCylinder(transform.position,
-				transform.position + Vector3.up * 2, 
+			DebugExtension.DrawCircle(transform.position + Vector3.up * 0.1f,
+				Vector3.up, 
 				Color.blue,
 				config.attackMaxRadius);
 			if (TeamId != 0) {
-				DebugExtension.DrawCylinder(transform.position,
-					transform.position + Vector3.up * 2, 
+				DebugExtension.DrawCircle(transform.position + Vector3.up * 0.1f,
+					Vector3.up,
 					Color.yellow,
 					config.chaseRadius);
 			}
@@ -179,6 +186,21 @@ namespace Strategy {
 			hp = config.maxHp;
 		}
 		
+		// This function is called when the object becomes enabled and active.
+		protected void OnEnable()
+		{
+			alignVelocityHandle = Timing.RunCoroutine(Util.AlignAgentRotation(
+				animancer.transform, GetAgentVelocity, 0.2f).CancelWith(gameObject));
+			alignPositionHandle = Timing.RunCoroutine(Util.AlignAgentPosition(
+				animancer.transform, () => transform.position, 0.2f).CancelWith(gameObject));
+		}
+		
+		// This function is called when the behaviour becomes disabled () or inactive.
+		protected void OnDisable()
+		{
+			Timing.KillCoroutines(alignVelocityHandle);
+			Timing.KillCoroutines(alignPositionHandle);
+		}
 		
 		public void SetDestination(Vector3 dest) {
 			agent.SetDestination(dest);

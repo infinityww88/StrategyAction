@@ -91,17 +91,31 @@ namespace Strategy {
 			}
 		}
 		
-		public static IEnumerator<float> AlignAgentRotation(Transform body, Func<Vector3> velocityProvider) {
+		public static IEnumerator<float> AlignAgentRotation(Transform body,
+			Func<Vector3> velocityProvider,
+			float lerpFactor) {
+			Debug.Log($"=align start {body.parent.gameObject.name}");
 			while (true) {
 				var vel = velocityProvider();
-				vel.y = 0;
-				var forward = body.forward;
-				forward.y = 0;
-				var dir = Vector3.Lerp(forward, vel, 0.01f);
-				body.LookAt(body.position + dir, Vector3.up);
+				ConsoleProDebug.Watch($"{body.parent.gameObject.name} vel", $"{vel} {vel.magnitude}");
+				if (vel.magnitude > 0) {
+					vel.y = 0;
+					var forward = body.forward;
+					forward.y = 0;
+					var dir = Vector3.Lerp(forward.normalized, vel.normalized, lerpFactor);
+					body.LookAt(body.position + dir, Vector3.up);
+				}
 				yield return Timing.WaitForOneFrame;
 			}
-			
+				Debug.Log($"=align end {body.parent.gameObject.name}");
+		}
+		
+		public static IEnumerator<float> AlignAgentPosition(Transform body, Func<Vector3> positionProvider, float lerpFactor) {
+			while (true) {
+				var pos = positionProvider();
+				body.position = Vector3.Lerp(body.position, pos, lerpFactor);
+				yield return Timing.WaitForOneFrame;
+			}
 		}
 	}
 }
