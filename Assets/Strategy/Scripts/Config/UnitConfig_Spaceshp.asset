@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   skillCD: 0
+  attackPoint: 0
   attackMinRadius: 0
-  attackMaxRadius: 12.22
+  attackMaxRadius: 62.52
   chaseRadius: 1000
   attackPeriod: 2
   attackTimePercent: 2
@@ -23,6 +24,6 @@ MonoBehaviour:
   findEnemiesPolicy: 2
   idleClip: {fileID: 0}
   moveClip: {fileID: 0}
-  attackClip: {fileID: 0}
+  attackClip: {fileID: 7400000, guid: fabb478f8c39d7c43a610688b9bc1603, type: 2}
   skillClip: {fileID: 0}
-  deadClip: {fileID: 7400000, guid: 49dfc8ec1359b3245bc298e9cc19b2c2, type: 2}
+  deadClip: {fileID: 0}

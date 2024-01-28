@@ -11,7 +11,7 @@ namespace Strategy {
 	public class AttackState : UnitState
 	{
 		private Unit target;
-		private BaseAttack attackBehavior;
+		private BaseAttack[] attackBehaviors;
 		private AnimancerState currState;
 		
 		public Unit Target => target;
@@ -20,7 +20,7 @@ namespace Strategy {
 		
 		protected void Awake() {
 			base.Awake();
-			attackBehavior = GetComponent<BaseAttack>();
+			attackBehaviors = GetComponents<BaseAttack>();
 		}
 		
 		// This function is called when the object becomes enabled and active.
@@ -50,7 +50,9 @@ namespace Strategy {
 		}
 		
 		private void Attack() {
-			attackBehavior.ApplyAttack(target);
+			foreach (var a in attackBehaviors) {
+				a.ApplyAttack(target);
+			}
 		}
 		
 		private IEnumerator<float> StartAttack() {
