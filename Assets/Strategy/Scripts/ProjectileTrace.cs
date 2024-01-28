@@ -20,16 +20,16 @@ namespace Strategy {
 		// Update is called once per frame
 		void Update()
 		{
-			if ((transform.position - target.position).magnitude < radius) {
+			Vector3 d = target.position - transform.position;
+			
+			if (d.magnitude < radius) {
 				Debug.Log("Hit Target");
 				Destroy(gameObject);
 				return;
 			}
-		
-			Vector3 v = (target.position - transform.position).normalized;
-			v = Vector3.Lerp(transform.forward, v, lerpFactor);
-			transform.LookAt(transform.position + v, Vector3.up);
-			transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
+
+			transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * speed);
+			transform.LookAt(target, Vector3.up);
 		}
 	}
 

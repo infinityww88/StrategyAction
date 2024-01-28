@@ -11,11 +11,17 @@ namespace Strategy {
 	public class AttackState : UnitState
 	{
 		private Unit target;
+		private BaseAttack attackBehavior;
 		private AnimancerState currState;
 		
 		public Unit Target => target;
 		
 		private CoroutineHandle handle;
+		
+		protected void Awake() {
+			base.Awake();
+			attackBehavior = GetComponent<BaseAttack>();
+		}
 		
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
@@ -30,15 +36,27 @@ namespace Strategy {
 		{
 			if (target != null) {
 				Gizmos.color = Color.red;
-				Gizmos.DrawSphere(target.transform.position, 0.2f);
+				Gizmos.DrawSphere(target.transform.position, 0.5f);
+				/*
+				var body = unit.animancer.transform;
+				var lookv = target.transform.position - body.position;
+				
+				Gizmos.color = Color.yellow;
+				
+				Gizmos.DrawLine(body.position, body.position + lookv * 100);
+				Gizmos.DrawLine(body.position, body.position + body.forward * 100);
+				*/
 			}
+		}
+		
+		private void Attack() {
+			attackBehavior.ApplyAttack(target);
 		}
 		
 		private IEnumerator<float> StartAttack() {
 			InAttack = false;
 			while (true) {
 				target = GetTarget(target);
-				ConsoleProDebug.Watch($"{gameObject.name} attack target", $"{target}");
 				if (target == null) {
 					yield return Timing.WaitForOneFrame;
 					continue;
@@ -46,9 +64,9 @@ namespace Strategy {
 				yield return Timing.WaitUntilDone(LookAtTarget());
 				if (unit.config.attackClip != null) {
 					InAttack = true;
-					Debug.Log($"{gameObject.name} {Time.frameCount} start Attack");
 					unit.animancer.Stop();
 					currState = unit.animancer.Play(unit.config.attackClip);
+					currState.Speed = unit.attackSpeed;
 					yield return Timing.WaitUntilTrue(CurrentStateEnd);
 					InAttack = false;
 					currState = null;
@@ -59,10 +77,6 @@ namespace Strategy {
 		
 		private bool CurrentStateEnd() {
 			return currState != null && currState.NormalizedTime >= 1;
-		}
-		
-		public void Attack() {
-			
 		}
 		
 		// This function is called when the behaviour becomes disabled () or inactive.
@@ -98,11 +112,13 @@ namespace Strategy {
 				lookv.y = 0;
 				var forward = body.forward;
 				forward.y = 0;
+				lookv.Normalize();
+				forward.Normalize();
 				float angle = Vector3.Angle(forward, lookv);
-				if (angle < 1)  {
+				if (angle < 0.2f)  {
 					break;
 				}
-				lookv = Vector3.Lerp(forward, lookv, 0.2f).normalized;
+				lookv = Vector3.Lerp(forward, lookv, 0.1f);
 				body.LookAt(body.position + lookv, Vector3.up);
 				yield return Timing.WaitForOneFrame;
 			}

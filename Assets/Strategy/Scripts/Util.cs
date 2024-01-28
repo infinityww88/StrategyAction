@@ -94,10 +94,8 @@ namespace Strategy {
 		public static IEnumerator<float> AlignAgentRotation(Transform body,
 			Func<Vector3> velocityProvider,
 			float lerpFactor) {
-			Debug.Log($"=align start {body.parent.gameObject.name}");
 			while (true) {
 				var vel = velocityProvider();
-				ConsoleProDebug.Watch($"{body.parent.gameObject.name} vel", $"{vel} {vel.magnitude}");
 				if (vel.magnitude > 0) {
 					vel.y = 0;
 					var forward = body.forward;
@@ -107,7 +105,6 @@ namespace Strategy {
 				}
 				yield return Timing.WaitForOneFrame;
 			}
-				Debug.Log($"=align end {body.parent.gameObject.name}");
 		}
 		
 		public static IEnumerator<float> AlignAgentPosition(Transform body, Func<Vector3> positionProvider, float lerpFactor) {

@@ -46,7 +46,7 @@ namespace Strategy {
 		private MoveState moveState;
 		private FreezeState freezeState;
 		
-		public float attackSpeed;
+		public float attackSpeed = 1;
 		
 		private List<Unit> enemiesInAttackRange = new	List<Unit>();
 		private List<Unit> enemiesInChaseRange = new	List<Unit>();

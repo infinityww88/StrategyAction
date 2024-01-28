@@ -23,7 +23,7 @@ namespace Strategy {
 			var target = GetComponent<AttackState>().Target;
 			var bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
 			bullet.GetComponent<Projectile>().Project(target.transform.position);
-			Destroy(bullet, 5);
+			Destroy(bullet, 8);
 		}
 	}
 

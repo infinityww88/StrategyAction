@@ -9,6 +9,7 @@ public class UnitConfig : ScriptableObject
 {
 	public float maxHp;
 	public float skillCD;
+	public float attackPoint;
 	
 	public float attackMinRadius;
 	public float attackMaxRadius;

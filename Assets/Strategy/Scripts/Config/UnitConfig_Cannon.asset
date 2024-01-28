@@ -23,6 +23,6 @@ MonoBehaviour:
   findEnemiesPolicy: 2
   idleClip: {fileID: 0}
   moveClip: {fileID: 0}
-  attackClip: {fileID: 0}
+  attackClip: {fileID: 7400000, guid: fabb478f8c39d7c43a610688b9bc1603, type: 2}
   skillClip: {fileID: 0}
   deadClip: {fileID: 0}
