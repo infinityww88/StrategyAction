@@ -144,6 +144,16 @@ namespace Strategy {
 				}
 			}
 		
+		public static float GetLookAtAngle(Transform self, Transform target) {
+			var lookv = target.transform.position - self.position;
+			lookv.y = 0;
+			var forward = self.forward;
+			forward.y = 0;
+			lookv.Normalize();
+			forward.Normalize();
+			return Vector3.Angle(forward, lookv);
+		}
+		
 		public static IEnumerator<float> LookAtTarget(Transform self,
 			Transform target,
 			float angleThreshold,

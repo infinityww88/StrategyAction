@@ -780,9 +780,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackMinRadius: 17.3
   attackMaxRadius: 50
+  attackInterval: 2
+  hasCD: 1
+  lookAtAngleThreshold: 1
+  lookAtLerpFactor: 0.2
   bulletSpawnPoint: {fileID: 1049859098}
   bulletPrefab: {fileID: 6386759330874773988, guid: 5fb666b7d0f7807419c0170bd03dad7e, type: 3}
-  attackInterval: 2
 --- !u!65 &622860915
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1890,9 +1893,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackMinRadius: 18
   attackMaxRadius: 40
+  attackInterval: 1
+  hasCD: 1
+  lookAtAngleThreshold: 5
+  lookAtLerpFactor: 0.1
   missilePrefab: {fileID: 9122381504761351372, guid: a311da891a392aa4f97be6af4618861b, type: 3}
   spawnPoint: {fileID: 1206350799}
-  attackInterval: 1
 --- !u!1 &1278484176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1945,53 +1951,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2365374670032204529, guid: 7d7ac6569fd39bb4daedbcaa36299e45, type: 3}
   m_PrefabInstance: {fileID: 7810434831773920595}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1597953737
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1597953739}
-  - component: {fileID: 1597953738}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1597953738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1597953737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8cda4f41c5665e45877a381c70ff671, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unit: {fileID: 0}
-  target: {fileID: 1597953739}
-  unitPrefab: {fileID: 798371393593823198, guid: c0a84e087943d5e4495bf20c36011e91, type: 3}
---- !u!4 &1597953739
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1597953737}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.4, y: 0, z: 65.9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1604612723
 GameObject:
   m_ObjectHideFlags: 0
@@ -2591,9 +2550,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackMinRadius: 17.3
   attackMaxRadius: 34.86
+  attackInterval: 2
+  hasCD: 1
+  lookAtAngleThreshold: 0.1
+  lookAtLerpFactor: 0.1
   bulletSpawnPoint: {fileID: 1958076583}
   bulletPrefab: {fileID: 6386759330874773988, guid: 5fb666b7d0f7807419c0170bd03dad7e, type: 3}
-  attackInterval: 2
 --- !u!65 &1996127976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4682,4 +4644,3 @@ SceneRoots:
   - {fileID: 2062077031360151455}
   - {fileID: 6552634757158722334}
   - {fileID: 1278484178}
-  - {fileID: 1597953739}
