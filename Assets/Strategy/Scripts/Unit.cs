@@ -26,6 +26,9 @@ namespace Strategy {
 		[SerializeField]
 		private float chaseRadius;
 		
+		[SerializeField]
+		private float chaseMinRadius;
+		
 		private AgentAuthoring agent;
 		
 		[SerializeField]
@@ -43,6 +46,8 @@ namespace Strategy {
 		private UnitState currState = null;
 		
 		public float ChaseRadius => chaseRadius;
+		
+		public float ChaseMinRadius => chaseMinRadius;
 		
 		private IdleState idleState;
 		private ChaseState chaseState;
@@ -135,7 +140,7 @@ namespace Strategy {
 			enemiesInChaseRange.AddRange(
 				Util.GetUnits(
 				NavBody.transform.position,
-				0,
+				ChaseMinRadius,
 				ChaseRadius,
 				Util.EnemyTeamId(TeamId),
 				attackLayers));
@@ -165,6 +170,10 @@ namespace Strategy {
 		protected void OnDrawGizmosSelected()
 		{
 			var center = NavBody == null ? transform.position : NavBody.position;
+			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
+				Vector3.up,
+				Color.HSVToRGB(0.5f, 0.5f, 1),
+				ChaseMinRadius);
 			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
 				Vector3.up,
 				Color.HSVToRGB(0.5f, 1, 1),
@@ -237,6 +246,9 @@ namespace Strategy {
 					
 					if (Util.GetLiveUnits(enemiesInChaseRange).Count() > 0 || TeamId == 1) {
 						SwitchState(chaseState);
+					}
+					else {
+						SwitchState(idleState);
 					}
 				}
 			}

@@ -38,6 +38,7 @@ namespace Strategy {
 		
 		public override void StopAttack() {
 			Timing.KillCoroutines(attackCoroHandle);
+			unit.InAttackAnimation = false;
 		}
 		
 		void Attack() {
