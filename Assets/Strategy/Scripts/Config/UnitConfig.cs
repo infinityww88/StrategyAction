@@ -11,13 +11,8 @@ public class UnitConfig : ScriptableObject
 	public float skillCD;
 	public float attackPoint;
 	
-	public float attackMinRadius;
-	public float attackMaxRadius;
-	
-	public float chaseRadius;
-	
-	public float attackPeriod;
-	public float attackTimePercent;
+	public float chaseBeginRadius;	// enemies 进入这个半径开始追击
+	public float chaseEndRadius;	// enemies 进入这个半径停止追击，开始攻击
 	
 	public float refreshTargetInterval;
 	
@@ -25,7 +20,7 @@ public class UnitConfig : ScriptableObject
 	
 	public AnimationClip idleClip;
 	public AnimationClip moveClip;
-	public AnimationClip attackClip;
-	public AnimationClip skillClip;
+	//public AnimationClip attackClip;
+	//public AnimationClip skillClip;
 	public AnimationClip deadClip;
 }

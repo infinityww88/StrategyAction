@@ -13,7 +13,7 @@ namespace Strategy {
 			unit.StopAgent();
 			unit.GetComponent<AgentAuthoring>().enabled = false;
 			if (unit.config.deadClip != null) {
-				unit.animancer.Play(unit.config.deadClip);
+				animancer.Play(unit.config.deadClip);
 			}
 		}
 	

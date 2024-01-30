@@ -16,7 +16,7 @@ namespace Strategy {
 		protected void OnEnable()
 		{
 			if (unit.config.moveClip != null) {
-				unit.animancer.Play(unit.config.moveClip);
+				animancer.Play(unit.config.moveClip);
 			}
 			handle = Timing.RunCoroutine(SetTarget().CancelWith(gameObject));
 		}
@@ -24,10 +24,12 @@ namespace Strategy {
 		private Vector3 targetPos;
 		
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
-		protected void OnDrawGizmos()
+		protected void OnDrawGizmosSelected()
 		{
-			Gizmos.color = Color.green;
-			Gizmos.DrawLine(transform.position + Vector3.up * 0.1f, targetPos + Vector3.up * 0.1f);
+			if (unit != null && unit.NavBody != null) {
+				Gizmos.color = Color.green;
+				Gizmos.DrawLine(unit.NavBody.transform.position + Vector3.up * 0.1f, targetPos + Vector3.up * 0.1f);
+			}
 		}
 		
 		IEnumerator<float> SetTarget() {
@@ -37,17 +39,19 @@ namespace Strategy {
 				
 				target = GetTarget(target);
 			
-				Vector3 dest = transform.position;
+				Vector3 dest = unit.NavBody.position;
+				
+				ConsoleProDebug.Watch($"{gameObject.name} chase ", $"target {target}");
 				
 				if (target != null) {
-					dest = target.transform.position;
+					dest = target.NavBody.position;
 				}
 				else {
 					Assert.IsTrue(unit.TeamId == 1, "self team cannot get target enemies");
-					Vector3 bottomPos = unit.transform.position;
+					Vector3 bottomPos = unit.NavBody.position;
 					bottomPos.z = GameController.Instance.bottomLine;
-					if (unit.transform.position.z < bottomPos.z
-						&& Mathf.Abs(unit.transform.position.z - bottomPos.z) > 6f) {
+					if (unit.NavBody.transform.position.z < bottomPos.z
+						&& Mathf.Abs(unit.NavBody.transform.position.z - bottomPos.z) > 6f) {
 						dest = bottomPos;
 					}
 					else {
@@ -66,20 +70,25 @@ namespace Strategy {
 		// This function is called when the behaviour becomes disabled () or inactive.
 		protected void OnDisable()
 		{
-			unit.animancer.Stop();
+			animancer.Stop();
 			Timing.KillCoroutines(handle);
 		}
 		
 		protected virtual Unit GetTarget(Unit currTarget) {
 			if (currTarget != null && !currTarget.IsDead) {
-				float d = Util.XZDistance(currTarget.transform.position, transform.position);
-				if (d >= unit.config.attackMaxRadius && d < unit.config.chaseRadius) {
+				float d = Util.XZDistance(currTarget.transform.position, unit.NavBody.transform.position);
+				if (d >= unit.config.chaseEndRadius && d < unit.config.chaseBeginRadius) {
 					return currTarget;
 				}
 			}
 			
-			var e = Util.GetNearest(transform.position,
-				Util.GetLiveUnits(unit.GetEnemiesInChaseRange()));
+			var e = Util.GetNearestLiveEnemy(unit.TeamId,
+				unit.NavBody.position,
+				unit.config.chaseEndRadius,
+				unit.config.chaseBeginRadius,
+				unit.attackLayers);
+				
+			ConsoleProDebug.Watch($"get target {gameObject.name}", $"{unit.config.chaseEndRadius} {unit.config.chaseBeginRadius} {e}");
 			
 			if (e != null) {
 				return e;

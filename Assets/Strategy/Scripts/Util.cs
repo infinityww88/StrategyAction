@@ -21,8 +21,18 @@ namespace Strategy {
 		
 		public static Unit GetNearest(Vector3 center,
 			IEnumerable<Unit> units) {
-				return units.OrderBy(e => Util.XZDistance(e.transform.position, center))
+				return units.OrderBy(e => Util.XZDistance(e.NavBody.position, center))
 					.FirstOrDefault();
+			}
+		
+		public static Unit GetNearestLiveEnemy(int teamId,
+			Vector3 pos,
+			float minRadius,
+			float maxRadius,
+			UnitLayer layers) {
+				return GetNearest(pos,
+					GetLiveUnits(
+						GetUnits(pos, minRadius, maxRadius, (teamId + 1) % 2, layers)));
 			}
 		
 		public static Unit GetNearestEnemy(int teamId,
@@ -49,13 +59,31 @@ namespace Strategy {
 					if ((e.unitLayer & layers) == 0) {
 						return false;
 					}
-					float d = Util.XZDistance(e.transform.position, center);
+					float d = Util.XZDistance(e.NavBody.position, center);
 					if (d < minRadius || d >= maxRadius) {
 						return false;
 					}
 				return true;
 			});
 		}
+		
+		public static bool InRadiusXZ(Vector3 a, Vector3 b, float radius) {
+			return InRadiusXZ(a, b, 0, radius);
+		}
+		
+		public static bool InRadiusXZ(Vector3 a, Vector3 b, float minRadius, float maxRadius) {
+			if (Mathf.Abs(a.x - b.x) >= maxRadius || Mathf.Abs(a.z - b.z) >= maxRadius) {
+				return false;
+			}
+			float d = (a-b).XZ().magnitude;
+			return d >= minRadius && d < maxRadius;
+		}
+		
+		public static IEnumerable<Unit> GetUnitsInRange(Vector3 center,
+			float radius,
+			IEnumerable<Unit> units) {
+				return units.Where(e => InRadiusXZ(center, e.NavBody.position, radius));
+			}
 		
 		public static string UnitsInfo(IEnumerable<Unit> units) {
 			string info = "";
@@ -107,10 +135,32 @@ namespace Strategy {
 			}
 		}
 		
-		public static IEnumerator<float> AlignAgentPosition(Transform body, Func<Vector3> positionProvider, float lerpFactor) {
+		public static IEnumerator<float> AlignAgentPosition(Transform body,
+			Func<Vector3> positionProvider, float lerpFactor) {
+				while (true) {
+					var pos = positionProvider();
+					body.position = Vector3.Lerp(body.position, pos, lerpFactor);
+					yield return Timing.WaitForOneFrame;
+				}
+			}
+		
+		public static IEnumerator<float> LookAtTarget(Transform self,
+			Transform target,
+			float angleThreshold,
+			float lerpFactor) {
 			while (true) {
-				var pos = positionProvider();
-				body.position = Vector3.Lerp(body.position, pos, lerpFactor);
+				var lookv = target.transform.position - self.position;
+				lookv.y = 0;
+				var forward = self.forward;
+				forward.y = 0;
+				lookv.Normalize();
+				forward.Normalize();
+				float angle = Vector3.Angle(forward, lookv);
+				if (angle < angleThreshold)  {
+					break;
+				}
+				lookv = Vector3.Lerp(forward, lookv, lerpFactor);
+				self.LookAt(self.position + lookv, Vector3.up);
 				yield return Timing.WaitForOneFrame;
 			}
 		}

@@ -16,14 +16,14 @@ namespace Strategy {
 			startTime = Time.time;
 			unit.StopAgent();
 			if (unit.config.idleClip) {
-				unit.animancer.Play(unit.config.idleClip);
+				animancer.Play(unit.config.idleClip);
 			}
 		}
 
 		// Update is called once per frame
 		void OnDisable()
 		{
-			unit.animancer.Stop();
+			animancer.Stop();
 		}
     
 		public bool IsFreezing {

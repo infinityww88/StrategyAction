@@ -13,7 +13,7 @@ namespace Strategy {
 		}
 		
 		public void SendMessageUp(string msg) {
-			msgTarget.SendMessage(msg);
+			msgTarget.SendMessageUpwards(msg);
 		}
 		
 		public void SendMessage(string msg) {

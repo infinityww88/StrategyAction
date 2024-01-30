@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using ProjectDawn.Navigation.Hybrid;
 using ProjectDawn.Navigation;
-using Animancer;
 using DG.Tweening;
 using System;
 using System.Linq;
@@ -14,10 +13,10 @@ namespace Strategy {
 	
 	[System.Flags]
 	public enum UnitLayer {
-		None = 0,
 		Ground = 1 << 0,
 		Sky = 1 << 1,
-		ALL = -1
+		ALL = -1,
+		None = 0,
 	}
 	
 	public class Unit : MonoBehaviour
@@ -27,11 +26,12 @@ namespace Strategy {
 		private AgentAuthoring agent;
 		
 		[SerializeField]
+		private Transform body;
+		
+		[SerializeField]
 		private int teamId = 0;
 		
 		public int TeamId => teamId;
-		
-		public AnimancerComponent animancer;
 		
 		public Vector3 Destination { get; set; }
 		
@@ -48,8 +48,8 @@ namespace Strategy {
 		
 		public float attackSpeed = 1;
 		
-		private List<Unit> enemiesInAttackRange = new	List<Unit>();
-		private List<Unit> enemiesInChaseRange = new	List<Unit>();
+		private List<Unit> enemiesInAttackRange = new List<Unit>();
+		private List<Unit> enemiesInChaseRange = new List<Unit>();
 		
 		private bool hasMoveTarget = false;
 		private Vector3 targetPos = Vector3.zero;
@@ -77,7 +77,7 @@ namespace Strategy {
 		void Awake() {
 			//animancer = GetComponentInChildren<AnimancerComponent>();
 			
-			agent = GetComponent<AgentAuthoring>();
+			agent = GetComponentInChildren<AgentAuthoring>();
 			
 			idleState = GetComponent<IdleState>();
 			chaseState = GetComponent<ChaseState>();
@@ -86,6 +86,9 @@ namespace Strategy {
 			moveState = GetComponent<MoveState>();
 			freezeState = GetComponent<FreezeState>();
 		}
+		
+		public Transform NavBody => agent?.transform;
+		public Transform Body => body;
 	
 		public EState State { get; set; }
 		
@@ -125,20 +128,20 @@ namespace Strategy {
 			enemiesInAttackRange.Clear();
 			enemiesInAttackRange.AddRange(
 				Util.GetUnits(
-					transform.position,
-					config.attackMinRadius,
-					config.attackMaxRadius,
-					Util.EnemyTeamId(TeamId),
-					attackLayers));
+				NavBody.transform.position,
+				0,
+				config.chaseEndRadius,
+				Util.EnemyTeamId(TeamId),
+				attackLayers));
 		}
 		
 		void UpdateChaseEnemies() {
 			enemiesInChaseRange.Clear();
 			enemiesInChaseRange.AddRange(
 				Util.GetUnits(
-				transform.position,
-				config.attackMaxRadius,
-				config.chaseRadius,
+				NavBody.transform.position,
+				config.chaseEndRadius,
+				config.chaseBeginRadius,
 				Util.EnemyTeamId(TeamId),
 				attackLayers));
 		}
@@ -164,39 +167,30 @@ namespace Strategy {
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
 		protected void OnDrawGizmos()
 		{
-			DebugExtension.DrawCircle(transform.position + Vector3.up * 0.1f,
+			var center = NavBody == null ? transform.position : NavBody.position;
+			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
+				Vector3.up,
+				Color.HSVToRGB(0.5f, 0.5f, 1),
+				config.chaseBeginRadius);
+			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
 				Vector3.up, 
-				Color.red,
-				config.attackMinRadius);
-			DebugExtension.DrawCircle(transform.position + Vector3.up * 0.1f,
-				Vector3.up, 
-				Color.blue,
-				config.attackMaxRadius);
-			if (TeamId != 0) {
-				DebugExtension.DrawCircle(transform.position + Vector3.up * 0.1f,
-					Vector3.up,
-					Color.yellow,
-					config.chaseRadius);
-			}
+				Color.HSVToRGB(0.5f, 1, 1),
+				config.chaseEndRadius);		
 		}
 		
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
 		protected void Start()
 		{
 			hp = config.maxHp;
-		}
-		
-		// This function is called when the object becomes enabled and active.
-		protected void OnEnable()
-		{
+			
 			alignVelocityHandle = Timing.RunCoroutine(Util.AlignAgentRotation(
-				animancer.transform, GetAgentVelocity, 0.2f).CancelWith(gameObject));
+				Body, GetAgentVelocity, 0.2f).CancelWith(gameObject));
 			alignPositionHandle = Timing.RunCoroutine(Util.AlignAgentPosition(
-				animancer.transform, () => transform.position, 0.2f).CancelWith(gameObject));
+				Body, () => NavBody.position, 0.2f).CancelWith(gameObject));
 		}
 		
 		// This function is called when the behaviour becomes disabled () or inactive.
-		protected void OnDisable()
+		protected void OnDestroy()
 		{
 			Timing.KillCoroutines(alignVelocityHandle);
 			Timing.KillCoroutines(alignPositionHandle);
@@ -209,6 +203,8 @@ namespace Strategy {
 		public void StopAgent() {
 			agent.Stop();
 		}
+		
+		public bool InAttackAnimation { get; set; }
 
 		void Update() {
 			
@@ -226,16 +222,16 @@ namespace Strategy {
 				SwitchState(moveState);
 			}
 			else {
+				if (InAttackAnimation) {
+					return;
+				}
 				UpdateAttackEnemies();
 				if (Util.GetLiveUnits(enemiesInAttackRange).Count() > 0) {
 					SwitchState(attackState);
 				}
 				else {
 					UpdateChaseEnemies();
-					var s = currState as AttackState;
-					if (s != null && s.InAttack) {
-						return;
-					}
+					
 					if (Util.GetLiveUnits(enemiesInChaseRange).Count() > 0 || TeamId == 1) {
 						SwitchState(chaseState);
 					}

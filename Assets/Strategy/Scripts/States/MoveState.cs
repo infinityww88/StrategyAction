@@ -22,7 +22,7 @@ namespace Strategy {
 		protected void OnEnable()
 		{
 			if (unit.config.moveClip != null) {
-				unit.animancer.Play(unit.config.moveClip);
+				animancer.Play(unit.config.moveClip);
 			}
 			targetUpadteHandle = Timing.RunCoroutine(MoveToTarget().CancelWith(gameObject));
 			stuckMonitorHandle = Timing.RunCoroutine(MonitorStuck().CancelWith(gameObject));
@@ -31,7 +31,7 @@ namespace Strategy {
 		// This function is called when the behaviour becomes disabled () or inactive.
 		protected void OnDisable()
 		{
-			unit.animancer.Stop();
+			animancer.Stop();
 			Timing.KillCoroutines(targetUpadteHandle);
 			Timing.KillCoroutines(stuckMonitorHandle);
 		}
@@ -50,8 +50,8 @@ namespace Strategy {
 		private IEnumerator<float> MonitorStuck() {
 			while (true) {
 				yield return Timing.WaitForSeconds(stuckMonitorInterval);
-				if (Util.XZDistance(transform.position, dest) < stuckPosDelta) {
-					Debug.Log($"clear move: stuck {transform.position} {dest}");
+				if (Util.XZDistance(unit.NavBody.transform.position, dest) < stuckPosDelta) {
+					Debug.Log($"clear move: stuck {unit.NavBody.transform.position} {dest}");
 					unit.ClearMoveTarget();
 					break;
 				}
@@ -61,7 +61,7 @@ namespace Strategy {
 		// Update is called every frame, if the MonoBehaviour is enabled.
 		protected void Update()
 		{
-			if (Util.XZDistance(transform.position, dest) < 0.2f) {
+			if (Util.XZDistance(unit.NavBody.transform.position, dest) < 0.2f) {
 				Debug.Log($"clear move: reach target {dest}");
 				unit.ClearMoveTarget();
 			}

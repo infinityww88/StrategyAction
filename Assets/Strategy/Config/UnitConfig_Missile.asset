@@ -10,20 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2162a863fd65ca6428e613139b339948, type: 3}
-  m_Name: UnitConfig 1
+  m_Name: UnitConfig_Missile
   m_EditorClassIdentifier: 
   maxHp: 100
   skillCD: 0
-  attackPoint: 1
-  attackMinRadius: 0
-  attackMaxRadius: 9.65
-  chaseRadius: 25.24
-  attackPeriod: 2
-  attackTimePercent: 2
+  attackPoint: 0
+  chaseBeginRadius: 1000
+  chaseEndRadius: 22.74
   refreshTargetInterval: 1
   findEnemiesPolicy: 2
-  idleClip: {fileID: 7400000, guid: c50f777db5f8c8e4ebc25faab6c74261, type: 2}
-  moveClip: {fileID: 7400000, guid: 9a55de757bdee924c87c79921564178f, type: 2}
-  attackClip: {fileID: 7400000, guid: cdd7d31db97d799479d020bb46c88405, type: 2}
-  skillClip: {fileID: 7400000, guid: aaee20ad6ec94e34ab2a4702f3019eeb, type: 2}
+  idleClip: {fileID: 0}
+  moveClip: {fileID: 0}
   deadClip: {fileID: 7400000, guid: 49dfc8ec1359b3245bc298e9cc19b2c2, type: 2}
