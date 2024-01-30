@@ -13,16 +13,24 @@ namespace Strategy {
 		public float attackInterval = 1f;
 		private CoroutineHandle attackCoroHandle;
 		
+		private Unit target;
+		
+		public override bool HasTarget() {
+			return TargetIsValid(target);
+		}
+		
+		public override void ScanTarget() {
+			target = Util.GetNearestLiveEnemy(unit.TeamId,
+				transform.position,
+				attackMinRadius,
+				attackMaxRadius,
+				unit.attackLayers);
+		}
+		
 		public IEnumerator<float> AttackCoro() {
-			
 			while (true) {
-				var target = Util.GetNearestLiveEnemy(unit.TeamId,
-					transform.position,
-					attackMinRadius,
-					attackMaxRadius,
-					unit.attackLayers);
-
-				if (target == null || target.IsDead) {
+				if (!HasTarget()) {
+					ScanTarget();
 					yield return Timing.WaitForOneFrame;
 					continue;
 				}

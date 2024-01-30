@@ -383,6 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 4bd30754a5c14724394c6dc7fde32468, type: 2}
+  chaseRadius: 1000
   body: {fileID: 2058174686}
   teamId: 0
   attackSpeed: 1
@@ -777,7 +778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackMinRadius: 17.3
-  attackMaxRadius: 34.86
+  attackMaxRadius: 50
   bulletSpawnPoint: {fileID: 1049859098}
   bulletPrefab: {fileID: 6386759330874773988, guid: 5fb666b7d0f7807419c0170bd03dad7e, type: 3}
   attackInterval: 2
@@ -1766,7 +1767,7 @@ Transform:
   m_GameObject: {fileID: 1197191406}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -54.5, y: 0, z: 52.1}
+  m_LocalPosition: {x: 1.6, y: 0, z: -48.3}
   m_LocalScale: {x: 2.19, y: 2.19, z: 2.19}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1784,8 +1785,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8cda4f41c5665e45877a381c70ff671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 0}
+  unit: {fileID: 7559901064590196303}
   target: {fileID: 1197191410}
+  unitPrefab: {fileID: 0}
 --- !u!1 &1206350798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1886,10 +1888,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackMinRadius: 18
-  attackMaxRadius: 58.3
+  attackMaxRadius: 40
   missilePrefab: {fileID: 9122381504761351372, guid: a311da891a392aa4f97be6af4618861b, type: 3}
   spawnPoint: {fileID: 1206350799}
   attackInterval: 1
+--- !u!1 &1278484176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1278484178}
+  - component: {fileID: 1278484177}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1278484177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278484176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8cda4f41c5665e45877a381c70ff671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 0}
+  target: {fileID: 1278484178}
+  unitPrefab: {fileID: 798371393593823198, guid: c0a84e087943d5e4495bf20c36011e91, type: 3}
+--- !u!4 &1278484178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278484176}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 98.9, y: 0, z: -148.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1518976154 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2365374670032204529, guid: 7d7ac6569fd39bb4daedbcaa36299e45, type: 3}
@@ -2618,7 +2667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackMinRadius: 0
-  attackMaxRadius: 7
+  attackMaxRadius: 8
   attackClip: {fileID: 7400000, guid: cdd7d31db97d799479d020bb46c88405, type: 2}
 --- !u!114 &2058174688
 MonoBehaviour:
@@ -2805,7 +2854,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackMinRadius: 0
-  attackMaxRadius: 7
+  attackMaxRadius: 8
   attackClip: {fileID: 7400000, guid: cdd7d31db97d799479d020bb46c88405, type: 2}
 --- !u!114 &536699054457240909
 MonoBehaviour:
@@ -3152,6 +3201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 20f4a3c12d9a56f4dba86906f159e354, type: 2}
+  chaseRadius: 25
   body: {fileID: 5530637716182245994}
   teamId: 1
   attackSpeed: 1
@@ -3295,6 +3345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 32c90524e3b24dc44a05d9db4aba2eda, type: 2}
+  chaseRadius: 1000
   body: {fileID: 5117349815314701302}
   teamId: 0
   attackSpeed: 1
@@ -4026,6 +4077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: d580dcd89228ce14ab80df98ce4b19c5, type: 2}
+  chaseRadius: 1000
   body: {fileID: 105307036515450743}
   teamId: 0
   attackSpeed: 1
@@ -4102,6 +4154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 7dd6cad930bd66945bdfb7e1e0f4ef3e, type: 2}
+  chaseRadius: 0
   body: {fileID: 0}
   teamId: 0
   attackSpeed: 0.5
@@ -4576,3 +4629,4 @@ SceneRoots:
   - {fileID: 1604612724}
   - {fileID: 2062077031360151455}
   - {fileID: 6552634757158722334}
+  - {fileID: 1278484178}

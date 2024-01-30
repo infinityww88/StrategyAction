@@ -77,18 +77,18 @@ namespace Strategy {
 		protected virtual Unit GetTarget(Unit currTarget) {
 			if (currTarget != null && !currTarget.IsDead) {
 				float d = Util.XZDistance(currTarget.transform.position, unit.NavBody.transform.position);
-				if (d >= unit.config.chaseEndRadius && d < unit.config.chaseBeginRadius) {
+				if (d < unit.ChaseRadius) {
 					return currTarget;
 				}
 			}
 			
 			var e = Util.GetNearestLiveEnemy(unit.TeamId,
 				unit.NavBody.position,
-				unit.config.chaseEndRadius,
-				unit.config.chaseBeginRadius,
+				0,
+				unit.ChaseRadius,
 				unit.attackLayers);
 				
-			ConsoleProDebug.Watch($"get target {gameObject.name}", $"{unit.config.chaseEndRadius} {unit.config.chaseBeginRadius} {e}");
+			ConsoleProDebug.Watch($"get target {gameObject.name}", $"{unit.ChaseRadius} {e}");
 			
 			if (e != null) {
 				return e;

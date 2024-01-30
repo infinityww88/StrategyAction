@@ -12,11 +12,23 @@ namespace Strategy {
 		private AnimancerComponent animancer;
 		private CoroutineHandle attackCoroHandle;
 		
+		private Unit target = null;
+		
+		public override bool HasTarget() {
+			return TargetIsValid(target);
+		}
+		
+		public override void ScanTarget() {
+			target = Util.GetNearestLiveEnemy(unit.TeamId,
+				transform.position,
+				0,
+				attackMaxRadius,
+				unit.attackLayers);
+		}
+		
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
 		protected new void Start()
 		{
-			attackMinRadius = 0;
-			attackMaxRadius = unit.config.chaseEndRadius;
 			animancer = GetComponent<AnimancerComponent>();
 		}
 
@@ -32,7 +44,7 @@ namespace Strategy {
 			
 		}
 		
-		Unit GetTarget(Unit target){
+		void GetTarget(Unit target){
 			if (target != null) {
 				if (target.IsDead) {
 					target = null;
@@ -46,24 +58,18 @@ namespace Strategy {
 				}
 			}
 			if (target == null) {
-				target = Util.GetNearestLiveEnemy(unit.TeamId,
-					transform.position,
-					0,
-					attackMaxRadius,
-					unit.attackLayers);
+				ScanTarget();
 			}
-			return target;
 		}
 		
 		private IEnumerator<float> AttackCoro() {
 			bool idle = false;
-			Unit target = null;
 			AnimancerState idleState = null;
 			AnimancerState attackState = null;
 			unit.InAttackAnimation = false;
 			
 			while (true) {
-				target = GetTarget(target);
+				GetTarget(target);
 				if (target == null) {
 					if (idle == false) {
 						idle = true;
@@ -78,7 +84,7 @@ namespace Strategy {
 				idle = false;
 				idleState = null;
 				
-				yield return Timing.WaitUntilDone(Util.LookAtTarget(transform, target.NavBody, 0.2f, 0.1f));
+				yield return Timing.WaitUntilDone(Util.LookAtTarget(transform, target.NavBody, 0.2f, 0.8f));
 				
 				unit.InAttackAnimation = true;
 				if (attackState == null){

@@ -15,23 +15,34 @@ namespace Strategy {
 		public float attackInterval = 1f;
 		private float lastLaunchTime = 0;
 		
+		private Unit target;
+		
+		public override bool HasTarget() {
+			return TargetIsValid(target);
+		}
+		
+		public override void ScanTarget() {
+			target = Util.GetNearestLiveEnemy(unit.TeamId,
+				transform.position,
+				attackMinRadius,
+				attackMaxRadius,
+				unit.attackLayers
+			);
+		}
+		
 		public IEnumerator<float> AttackCoro() {
 			while (true) {
 				float cd = Mathf.Max(0, attackInterval - (Time.time - lastLaunchTime));
 				if (cd > 0) {
 					yield return Timing.WaitForSeconds(cd);
 				}
-				var target = Util.GetNearestLiveEnemy(unit.TeamId,
-					transform.position,
-					attackMinRadius,
-					attackMaxRadius,
-					unit.attackLayers
-				);
-				if (target == null || target.IsDead) {
+				
+				if (!HasTarget()) {
+					ScanTarget();
 					yield return Timing.WaitForOneFrame;
 					continue;
 				}
-				yield return Timing.WaitUntilDone(Util.LookAtTarget(transform, target.Body, 0.2f, 0.1f));
+				yield return Timing.WaitUntilDone(Util.LookAtTarget(transform, target.Body, 5f, 0.1f));
 				var missile = Instantiate(missilePrefab, spawnPoint.position, spawnPoint.rotation);
 				missile.GetComponent<ProjectileTrace>().target = target.Body.transform;
 				lastLaunchTime = Time.time;

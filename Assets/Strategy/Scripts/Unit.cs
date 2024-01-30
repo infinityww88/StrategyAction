@@ -23,6 +23,9 @@ namespace Strategy {
 	{
 		public UnitConfig config;
 		
+		[SerializeField]
+		private float chaseRadius;
+		
 		private AgentAuthoring agent;
 		
 		[SerializeField]
@@ -39,6 +42,8 @@ namespace Strategy {
 		
 		private UnitState currState = null;
 		
+		public float ChaseRadius => chaseRadius;
+		
 		private IdleState idleState;
 		private ChaseState chaseState;
 		private DeadState deadState;
@@ -47,8 +52,7 @@ namespace Strategy {
 		private FreezeState freezeState;
 		
 		public float attackSpeed = 1;
-		
-		private List<Unit> enemiesInAttackRange = new List<Unit>();
+
 		private List<Unit> enemiesInChaseRange = new List<Unit>();
 		
 		private bool hasMoveTarget = false;
@@ -65,6 +69,10 @@ namespace Strategy {
 		
 		private CoroutineHandle alignVelocityHandle;
 		private CoroutineHandle alignPositionHandle;
+		
+		private BaseAttack[] attackBehaviors;
+		
+		public IEnumerable<BaseAttack> AttackBehaviors => attackBehaviors;
 	
 		public enum EState {
 			Idle,
@@ -85,6 +93,8 @@ namespace Strategy {
 			attackState = GetComponent<AttackState>();
 			moveState = GetComponent<MoveState>();
 			freezeState = GetComponent<FreezeState>();
+			
+			attackBehaviors = body.GetComponentsInChildren<BaseAttack>();
 		}
 		
 		public Transform NavBody => agent?.transform;
@@ -107,10 +117,6 @@ namespace Strategy {
 			return agent.EntityBody.Velocity;
 		}
 		
-		public List<Unit> GetEnemiesInAttackRange() {
-			return enemiesInAttackRange;
-		}
-		
 		public List<Unit> GetEnemiesInChaseRange() {
 			return enemiesInChaseRange;
 		}
@@ -124,24 +130,13 @@ namespace Strategy {
 			hasMoveTarget = false;
 		}
 		
-		void UpdateAttackEnemies() {
-			enemiesInAttackRange.Clear();
-			enemiesInAttackRange.AddRange(
-				Util.GetUnits(
-				NavBody.transform.position,
-				0,
-				config.chaseEndRadius,
-				Util.EnemyTeamId(TeamId),
-				attackLayers));
-		}
-		
 		void UpdateChaseEnemies() {
 			enemiesInChaseRange.Clear();
 			enemiesInChaseRange.AddRange(
 				Util.GetUnits(
 				NavBody.transform.position,
-				config.chaseEndRadius,
-				config.chaseBeginRadius,
+				0,
+				ChaseRadius,
 				Util.EnemyTeamId(TeamId),
 				attackLayers));
 		}
@@ -150,6 +145,8 @@ namespace Strategy {
 			if (currState == newState) {
 				return;
 			}
+			
+			Debug.Log($"switch state {gameObject.name} currState {currState} newState {newState}");
 			
 			if (currState != null) {
 				currState.enabled = false;
@@ -165,17 +162,13 @@ namespace Strategy {
 		private List<Vector3> remainPath = new	List<Vector3>();
 		
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
-		protected void OnDrawGizmos()
+		protected void OnDrawGizmosSelected()
 		{
 			var center = NavBody == null ? transform.position : NavBody.position;
 			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
 				Vector3.up,
-				Color.HSVToRGB(0.5f, 0.5f, 1),
-				config.chaseBeginRadius);
-			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
-				Vector3.up, 
 				Color.HSVToRGB(0.5f, 1, 1),
-				config.chaseEndRadius);		
+				ChaseRadius);
 		}
 		
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
@@ -204,6 +197,10 @@ namespace Strategy {
 			agent.Stop();
 		}
 		
+		public void EnableAgent(bool enabled) {
+			agent.enabled = enabled;
+		}
+		
 		public bool InAttackAnimation { get; set; }
 
 		void Update() {
@@ -225,8 +222,14 @@ namespace Strategy {
 				if (InAttackAnimation) {
 					return;
 				}
-				UpdateAttackEnemies();
-				if (Util.GetLiveUnits(enemiesInAttackRange).Count() > 0) {
+
+				if (!(currState is AttackState)) {
+					attackBehaviors.Foreach(e => e.ScanTarget());
+				}
+				
+				bool hasAttackTarget = attackBehaviors.Any(e => e.HasTarget());
+				
+				if (hasAttackTarget) {
 					SwitchState(attackState);
 				}
 				else {

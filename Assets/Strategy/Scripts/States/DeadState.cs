@@ -11,7 +11,7 @@ namespace Strategy {
 		protected void OnEnable()
 		{
 			unit.StopAgent();
-			unit.GetComponent<AgentAuthoring>().enabled = false;
+			unit.EnableAgent(false);
 			if (unit.config.deadClip != null) {
 				animancer.Play(unit.config.deadClip);
 			}

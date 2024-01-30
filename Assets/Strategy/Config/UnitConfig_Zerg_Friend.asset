@@ -15,8 +15,6 @@ MonoBehaviour:
   maxHp: 100
   skillCD: 0
   attackPoint: 0
-  chaseBeginRadius: 1000
-  chaseEndRadius: 7
   refreshTargetInterval: 1
   findEnemiesPolicy: 2
   idleClip: {fileID: 7400000, guid: c50f777db5f8c8e4ebc25faab6c74261, type: 2}

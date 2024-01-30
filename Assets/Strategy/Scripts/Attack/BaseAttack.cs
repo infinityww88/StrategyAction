@@ -10,6 +10,20 @@ namespace Strategy {
 		public float attackMinRadius;
 		public float attackMaxRadius;
 		
+		public virtual bool HasTarget() {
+			return false;
+		}
+		
+		public virtual void ScanTarget() {
+			
+		}
+		
+		protected bool TargetIsValid(Unit target) {
+			return target != null 
+				&& !target.IsDead 
+				&& Util.InRadiusXZ(transform.position, target.NavBody.position, attackMinRadius, attackMaxRadius);
+		}
+		
 		// Start is called before the first frame update
 		protected void Awake()
 		{
@@ -17,7 +31,7 @@ namespace Strategy {
 		}
 		
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
-		protected void OnDrawGizmos()
+		protected void OnDrawGizmosSelected()
 		{
 			DebugExtension.DrawCircle(transform.position, Vector3.up, Color.HSVToRGB(0, 0.7f, 1), attackMinRadius);
 			DebugExtension.DrawCircle(transform.position, Vector3.up, Color.HSVToRGB(0, 1, 1), attackMaxRadius);

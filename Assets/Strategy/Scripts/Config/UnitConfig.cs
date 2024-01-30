@@ -11,9 +11,6 @@ public class UnitConfig : ScriptableObject
 	public float skillCD;
 	public float attackPoint;
 	
-	public float chaseBeginRadius;	// enemies 进入这个半径开始追击
-	public float chaseEndRadius;	// enemies 进入这个半径停止追击，开始攻击
-	
 	public float refreshTargetInterval;
 	
 	public int findEnemiesPolicy;

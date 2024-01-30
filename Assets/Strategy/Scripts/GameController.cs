@@ -42,6 +42,14 @@ namespace Strategy {
 			return teamId == 1 ? team0Units : team1Units;
 		}
 		
+		public void AddUnit(Unit unit) {
+			if (unit.TeamId == 0) {
+				team0Units.Add(unit);
+			} else {
+				team1Units.Add(unit);
+			}
+		}
+		
 		// Awake is called when the script instance is being loaded.
 		protected void Awake()
 		{

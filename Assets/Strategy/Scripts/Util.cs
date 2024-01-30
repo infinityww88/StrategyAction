@@ -164,6 +164,12 @@ namespace Strategy {
 				yield return Timing.WaitForOneFrame;
 			}
 		}
+		
+		public static void Foreach<T>(this IEnumerable<T> array, Action<T> action) {
+			foreach (var e in array) {
+				action(e);
+			}
+		}
 	}
 }
 
