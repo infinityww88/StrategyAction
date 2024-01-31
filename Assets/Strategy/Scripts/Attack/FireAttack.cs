@@ -14,7 +14,7 @@ namespace Strategy {
 		public float lookAtAngleThreshold = 1f;
 		public float lookAtLerpFactor = 0.2f;
 		
-		private float lastLaunchTime = 0;
+		private float lastLaunchTime = -1000;
 		private Unit target;
 		
 		public override bool HasTarget() {
@@ -36,7 +36,6 @@ namespace Strategy {
 		
 		public IEnumerator<float> AttackCoro() {
 			while (true) {
-				
 				if (hasCD) {
 					float cd = Mathf.Max(0, attackInterval - (Time.time - lastLaunchTime));
 					if (cd > 0) {
