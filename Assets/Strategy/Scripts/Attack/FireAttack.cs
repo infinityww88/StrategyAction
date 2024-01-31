@@ -6,35 +6,19 @@ using MEC;
 namespace Strategy {
 	
 	public class FireAttack : BaseAttack
-	{		
-		private CoroutineHandle attackCoroHandle;
-
+	{
 		public float attackInterval = 1f;
 		public bool hasCD = true;
 		public float lookAtAngleThreshold = 1f;
 		public float lookAtLerpFactor = 0.2f;
 		
 		private float lastLaunchTime = -1000;
-		private Unit target;
-		
-		public override bool HasTarget() {
-			return TargetIsValid(target);
-		}
 		
 		protected virtual void Attack(Unit target) {
 			
 		}
 		
-		public override void ScanTarget() {
-			target = Util.GetNearestLiveEnemy(unit.TeamId,
-				transform.position,
-				attackMinRadius,
-				attackMaxRadius,
-				unit.attackLayers
-			);
-		}
-		
-		public IEnumerator<float> AttackCoro() {
+		protected override IEnumerator<float> AttackCoro() {
 			while (true) {
 				if (hasCD) {
 					float cd = Mathf.Max(0, attackInterval - (Time.time - lastLaunchTime));
@@ -62,14 +46,6 @@ namespace Strategy {
 				
 				yield return Timing.WaitForSeconds(attackInterval);
 			}
-		}
-		
-		public override void StartAttack() {
-			attackCoroHandle = Timing.RunCoroutine(AttackCoro().CancelWith(gameObject));
-		}
-		
-		public override void StopAttack() {
-			Timing.KillCoroutines(attackCoroHandle);
 		}
 	}
 }

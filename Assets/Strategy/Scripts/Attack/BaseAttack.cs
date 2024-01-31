@@ -1,21 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MEC;
 
 namespace Strategy {
 	
 	public class BaseAttack : MonoBehaviour
 	{
 		protected Unit unit;
+		protected Unit target;
 		public float attackMinRadius;
 		public float attackMaxRadius;
+		protected CoroutineHandle attackCoroHandle;
 		
 		public virtual bool HasTarget() {
-			return false;
+			return TargetIsValid(target);
 		}
 		
 		public virtual void ScanTarget() {
-			
+			target = Util.GetNearestLiveEnemy(
+				unit.TeamId,
+				transform.position,
+				attackMinRadius,
+				attackMaxRadius,
+				unit.attackLayers);
 		}
 		
 		protected bool TargetIsValid(Unit target) {
@@ -38,11 +46,16 @@ namespace Strategy {
 		}
 		
 		public virtual void StartAttack() {
-			
+			attackCoroHandle = Timing.RunCoroutine(
+				AttackCoro().CancelWith(gameObject));
 		}
 		
 		public virtual void StopAttack() {
-			
+			Timing.KillCoroutines(attackCoroHandle);
+		}
+		
+		protected virtual IEnumerator<float> AttackCoro() {
+			yield break;
 		}
 	}
 

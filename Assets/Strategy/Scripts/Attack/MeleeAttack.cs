@@ -10,21 +10,6 @@ namespace Strategy {
 	{
 		public AnimationClip attackClip;
 		private AnimancerComponent animancer;
-		private CoroutineHandle attackCoroHandle;
-		
-		private Unit target = null;
-		
-		public override bool HasTarget() {
-			return TargetIsValid(target);
-		}
-		
-		public override void ScanTarget() {
-			target = Util.GetNearestLiveEnemy(unit.TeamId,
-				transform.position,
-				0,
-				attackMaxRadius,
-				unit.attackLayers);
-		}
 		
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
 		protected new void Start()
@@ -32,12 +17,8 @@ namespace Strategy {
 			animancer = GetComponent<AnimancerComponent>();
 		}
 
-		public override void StartAttack() {
-			attackCoroHandle = Timing.RunCoroutine(AttackCoro().CancelWith(gameObject));
-		}
-		
 		public override void StopAttack() {
-			Timing.KillCoroutines(attackCoroHandle);
+			base.StopAttack();
 			unit.InAttackAnimation = false;
 		}
 		
@@ -63,7 +44,7 @@ namespace Strategy {
 			}
 		}
 		
-		private IEnumerator<float> AttackCoro() {
+		protected override IEnumerator<float> AttackCoro() {
 			bool idle = false;
 			AnimancerState idleState = null;
 			AnimancerState attackState = null;
