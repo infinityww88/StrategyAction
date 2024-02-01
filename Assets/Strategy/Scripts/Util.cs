@@ -180,6 +180,14 @@ namespace Strategy {
 				action(e);
 			}
 		}
+		
+		public static T RandomElement<T>(List<T> array) {
+			if (array.Count == 0) {
+				return default(T);
+			}
+			int n = UnityEngine.Random.Range(0, array.Count);
+			return array[n];
+		}
 	}
 }
 

@@ -23,13 +23,34 @@ namespace Strategy {
 		private Vector2 mouseStartPos = Vector2.zero;
 		
 		private HashSet<Unit> selectedUnit = new HashSet<Unit>();
-
+		
+		public List<GameObject> unitPrefabs;
+		private InputAction click = new InputAction(binding: "<Mouse>/rightButton");
+		
 		// Start is called before the first frame update
 		void Start()
 		{
 			root = uiDoc.rootVisualElement.Q("Root");
 			selectRect = root.Q("SelectRect");
-			Debug.Log(root.name);
+			click.performed += RightButtonClick;
+		}
+		
+		// This function is called when the object becomes enabled and active.
+		protected void OnEnable()
+		{
+			click.Enable();
+		}
+		
+		// This function is called when the behaviour becomes disabled () or inactive.
+		protected void OnDisable()
+		{
+			click.Disable();
+		}
+		
+		void RightButtonClick(InputAction.CallbackContext ctx) {
+			int teamId = Keyboard.current.ctrlKey.isPressed ? 1 : 0;
+			Vector2 pos = Mouse.current.position.value;
+			PutUnit(pos, teamId);
 		}
 		
 		void SelectUnit(Rect rect) {
@@ -79,20 +100,26 @@ namespace Strategy {
 			}
 		}
 		
-		// Update is called every frame, if the MonoBehaviour is enabled.
-		protected void Update()
-		{
-			MouseUpdate();
+		private bool GetGroundPos(Vector3 screenPos, out Vector3 groundPos) {
+			var ray = Camera.main.ScreenPointToRay(screenPos);
+			RaycastHit hit;
+			if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"))) {
+				groundPos = hit.point;
+				groundPos.y = 0;
+				return true;
+			}
+			groundPos = Vector3.zero;
+			return false;
+		}
+		
+		private void SelectUpdate() {
+			if (selectedUnit.Count == 0) {
+				return;
+			}
 			var mouse = Mouse.current;
 			if (mouse.rightButton.isPressed) {
-				var ray = Camera.main.ScreenPointToRay(mouse.position.value);
-				RaycastHit hit;
-				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"))) {
-					Vector3 pos = hit.point;
-					pos.y = 0;
-					if (selectedUnit.Count == 0) {
-						return;
-					}
+				Vector3 pos;
+				if (GetGroundPos(mouse.position.value, out pos)) {
 					Vector3 t = Vector3.zero;
 					selectedUnit.Select(u => u.NavBody.position).Foreach(u => {
 						t += u;
@@ -104,6 +131,25 @@ namespace Strategy {
 					});
 				}
 			}
+		}
+		
+		void PutUnit(Vector2 screenPos, int teamId) {
+			Vector3 groundPos;
+			if (GetGroundPos(screenPos, out groundPos)) {
+				var p = Util.RandomElement<GameObject>(unitPrefabs);
+				var o = Instantiate(p, groundPos, Quaternion.identity);
+				Unit unit = o.GetComponent<Unit>();
+				unit.SetTeamId(teamId);
+				GameController.Instance.AddUnit(unit);
+			}
+		}
+		
+		// Update is called every frame, if the MonoBehaviour is enabled.
+		protected void Update()
+		{
+			MouseUpdate();
+			SelectUpdate();
+			//PutUnitUpdate();
 		}
 	}
 	

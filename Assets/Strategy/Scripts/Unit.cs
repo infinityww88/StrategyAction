@@ -50,7 +50,7 @@ namespace Strategy {
 		
 		private UnitState currState = null;
 		
-		public float ChaseRadius => chaseRadius;
+		public float ChaseRadius => TeamId == 0 ? 1000 : chaseRadius;
 		
 		public float ChaseMinRadius => chaseMinRadius;
 		
@@ -105,6 +105,10 @@ namespace Strategy {
 			freezeState = GetComponent<FreezeState>();
 			
 			attackBehaviors = body.GetComponentsInChildren<BaseAttack>();
+		}
+		
+		public void SetTeamId(int teamId) {
+			this.teamId = teamId;
 		}
 		
 		public Transform NavBody => agent?.transform;
