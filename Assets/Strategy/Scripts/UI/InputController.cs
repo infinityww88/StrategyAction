@@ -8,11 +8,20 @@ namespace Strategy {
 	
 	public class InputController : MonoBehaviour
 	{
+		public enum EMode {
+			None,
+			Select,
+			MoveOrder,
+			PutUnit
+		}
+		
 		public UIDocument uiDoc;
 		private VisualElement root;
 		private VisualElement selectRect;
 		private bool mouseDown = false;
 		private Vector2 mouseStartPos = Vector2.zero;
+		
+		private HashSet<Unit> selectedUnit = new HashSet<Unit>();
 
 		// Start is called before the first frame update
 		void Start()
@@ -23,13 +32,16 @@ namespace Strategy {
 		}
 		
 		void SelectUnit(Rect rect) {
-			Unit[] units = FindObjectsOfType<Unit>();
-			foreach (var u in units) {
-				Vector2 p = Camera.main.WorldToScreenPoint(u.transform.position);
-				if (rect.Contains(p)) {
-					Debug.Log($"select {u.gameObject.name}");
+			GameController.Instance.GetTeam(0).Foreach(e => {
+				if (e.IsDead) {
+					return;
 				}
-			}
+				Vector2 p = Camera.main.WorldToScreenPoint(e.Body.position);
+				if (rect.Contains(p)) {
+					e.ShowSelectCircle(true);
+					selectedUnit.Add(e);
+				}
+			});
 		}
 		
 		void MouseUpdate() {
@@ -38,7 +50,10 @@ namespace Strategy {
 				if (!mouseDown) {
 					mouseDown = true;
 					mouseStartPos = mouse.position.value;
-					selectRect.style.display = DisplayStyle.Flex;
+					selectedUnit.Foreach(u => {
+						u.ShowSelectCircle(false);	
+					});
+					selectedUnit.Clear();
 				} else {
 					Vector2 currPos = mouse.position.value;
 					float left = Mathf.Min(currPos.x, mouseStartPos.x);
@@ -49,6 +64,7 @@ namespace Strategy {
 					selectRect.style.bottom = bottom;
 					selectRect.style.width = right - left;
 					selectRect.style.height = top - bottom;
+					selectRect.style.display = DisplayStyle.Flex;
 					SelectUnit(new Rect(left, bottom, right - left, top - bottom));
 				}
 			} else {
@@ -66,6 +82,18 @@ namespace Strategy {
 		protected void Update()
 		{
 			MouseUpdate();
+			var mouse = Mouse.current;
+			if (mouse.rightButton.isPressed) {
+				var ray = Camera.main.ScreenPointToRay(mouse.position.value);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"))) {
+					Vector3 pos = hit.point;
+					pos.y = 0;
+					selectedUnit.Foreach(u => {
+						u.SetMoveTarget(pos);
+					});
+				}
+			}
 		}
 	}
 	

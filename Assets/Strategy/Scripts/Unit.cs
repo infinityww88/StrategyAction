@@ -35,6 +35,9 @@ namespace Strategy {
 		private Transform body;
 		
 		[SerializeField]
+		private GameObject selectedCircle;
+		
+		[SerializeField]
 		private int teamId = 0;
 		
 		public int TeamId => teamId;
@@ -150,9 +153,7 @@ namespace Strategy {
 			if (currState == newState) {
 				return;
 			}
-			
-			Debug.Log($"switch state {gameObject.name} currState {currState} newState {newState}");
-			
+						
 			if (currState != null) {
 				currState.enabled = false;
 			}
@@ -178,6 +179,10 @@ namespace Strategy {
 				Vector3.up,
 				Color.HSVToRGB(0.5f, 1, 1),
 				ChaseRadius);
+		}
+		
+		public void ShowSelectCircle(bool show) {
+			selectedCircle.SetActive(show);
 		}
 		
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.

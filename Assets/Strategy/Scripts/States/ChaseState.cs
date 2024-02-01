@@ -41,8 +41,6 @@ namespace Strategy {
 			
 				Vector3 dest = unit.NavBody.position;
 				
-				ConsoleProDebug.Watch($"{gameObject.name} chase ", $"target {target}");
-				
 				if (target != null) {
 					dest = target.NavBody.position;
 				}
@@ -77,18 +75,16 @@ namespace Strategy {
 		protected virtual Unit GetTarget(Unit currTarget) {
 			if (currTarget != null && !currTarget.IsDead) {
 				float d = Util.XZDistance(currTarget.transform.position, unit.NavBody.transform.position);
-				if (d < unit.ChaseRadius) {
+				if (d >= unit.ChaseMinRadius && d < unit.ChaseRadius) {
 					return currTarget;
 				}
 			}
 			
 			var e = Util.GetNearestLiveEnemy(unit.TeamId,
 				unit.NavBody.position,
-				0,
+				unit.ChaseMinRadius,
 				unit.ChaseRadius,
 				unit.attackLayers);
-				
-			ConsoleProDebug.Watch($"get target {gameObject.name}", $"{unit.ChaseRadius} {e}");
 			
 			if (e != null) {
 				return e;

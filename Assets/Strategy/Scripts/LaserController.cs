@@ -27,6 +27,7 @@ namespace Strategy {
 		public void Close() {
 			target = null;
 			lineRenderer.enabled = false;
+			lineRenderer.SetPosition(1, Vector3.zero);
 		}
 		
 		void Update() {
