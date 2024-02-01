@@ -15,8 +15,8 @@ namespace Strategy {
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{
-			if (unit.config.moveClip != null) {
-				animancer.Play(unit.config.moveClip);
+			if (unit.moveClip != null) {
+				animancer.Play(unit.moveClip);
 			}
 			handle = Timing.RunCoroutine(SetTarget().CancelWith(gameObject));
 		}
@@ -61,7 +61,7 @@ namespace Strategy {
 			
 				unit.SetDestination(dest);
 	
-				yield return Timing.WaitForSeconds(unit.config.refreshTargetInterval);
+				yield return Timing.WaitForSeconds(unit.refreshTargetInterval);
 			}
 		}
 		

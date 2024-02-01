@@ -170,7 +170,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2173884093852265271}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 73.1, y: 0, z: -130.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -267,7 +267,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b2c5af40a77de4cb0f6c3b79b1ac19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: d580dcd89228ce14ab80df98ce4b19c5, type: 2}
+  maxHP: 100
+  idleClip: {fileID: 0}
+  moveClip: {fileID: 0}
+  attackClip: {fileID: 0}
+  deadClip: {fileID: 7400000, guid: 49dfc8ec1359b3245bc298e9cc19b2c2, type: 2}
+  refreshTargetInterval: 1
   chaseRadius: 1000
   chaseMinRadius: 12.43
   body: {fileID: 1095356040751698678}

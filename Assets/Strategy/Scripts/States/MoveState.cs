@@ -21,8 +21,8 @@ namespace Strategy {
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{
-			if (unit.config.moveClip != null) {
-				animancer.Play(unit.config.moveClip);
+			if (unit.moveClip != null) {
+				animancer.Play(unit.moveClip);
 			}
 			targetUpadteHandle = Timing.RunCoroutine(MoveToTarget().CancelWith(gameObject));
 			stuckMonitorHandle = Timing.RunCoroutine(MonitorStuck().CancelWith(gameObject));

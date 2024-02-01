@@ -21,7 +21,16 @@ namespace Strategy {
 	
 	public class Unit : MonoBehaviour
 	{
-		public UnitConfig config;
+		//public UnitConfig config;
+		[SerializeField]
+		private float maxHP;
+		
+		public AnimationClip idleClip = null;
+		public AnimationClip moveClip = null;
+		public AnimationClip attackClip = null;
+		public AnimationClip deadClip = null;
+		
+		public float refreshTargetInterval = 1f;
 		
 		[SerializeField]
 		private float chaseRadius;
@@ -194,7 +203,7 @@ namespace Strategy {
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
 		protected void Start()
 		{
-			hp = config.maxHp;
+			hp = maxHP;
 			
 			alignVelocityHandle = Timing.RunCoroutine(Util.AlignAgentRotation(
 				Body, GetAgentVelocity, 0.2f).CancelWith(gameObject));
