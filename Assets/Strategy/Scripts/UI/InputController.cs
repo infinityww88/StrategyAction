@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using System.Linq;
 
 namespace Strategy {
 	
@@ -89,8 +90,17 @@ namespace Strategy {
 				if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"))) {
 					Vector3 pos = hit.point;
 					pos.y = 0;
+					if (selectedUnit.Count == 0) {
+						return;
+					}
+					Vector3 t = Vector3.zero;
+					selectedUnit.Select(u => u.NavBody.position).Foreach(u => {
+						t += u;
+					});
+					t /= selectedUnit.Count;
+					var d = pos - t;
 					selectedUnit.Foreach(u => {
-						u.SetMoveTarget(pos);
+						u.SetMoveTarget(u.NavBody.position + d);
 					});
 				}
 			}
