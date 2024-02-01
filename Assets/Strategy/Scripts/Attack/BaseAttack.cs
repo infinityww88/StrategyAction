@@ -13,6 +13,10 @@ namespace Strategy {
 		public float attackMaxRadius;
 		protected CoroutineHandle attackCoroHandle;
 		
+		public string DebugInfo() {
+			return $"target {target}, corohandle {attackCoroHandle.IsRunning}";
+		}
+		
 		public virtual bool HasTarget() {
 			return TargetIsValid(target);
 		}
@@ -43,6 +47,10 @@ namespace Strategy {
 		{
 			DebugExtension.DrawCircle(transform.position, Vector3.up, Color.HSVToRGB(0, 0.7f, 1), attackMinRadius);
 			DebugExtension.DrawCircle(transform.position, Vector3.up, Color.HSVToRGB(0, 1, 1), attackMaxRadius);
+			if (TargetIsValid(target)) {
+				Gizmos.color = Color.red;
+				Gizmos.DrawSphere(target.NavBody.position, 0.5f);
+			}
 		}
 		
 		public virtual void StartAttack() {
@@ -56,6 +64,14 @@ namespace Strategy {
 		
 		protected virtual IEnumerator<float> AttackCoro() {
 			yield break;
+		}
+		
+		// Update is called every frame, if the MonoBehaviour is enabled.
+		protected void Update()
+		{
+			if (unit.Debug) {
+				ConsoleProDebug.Watch($"{unit.gameObject.name} {this}", $"{DebugInfo()}");
+			}
 		}
 	}
 

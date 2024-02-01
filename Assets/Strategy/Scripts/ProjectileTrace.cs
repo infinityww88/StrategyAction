@@ -17,7 +17,7 @@ namespace Strategy {
 			Vector3 d = target.position - transform.position;
 			
 			if (d.magnitude < radius) {
-				Debug.Log("Hit Target");
+				//Debug.Log("Hit Target");
 				Destroy(gameObject);
 				return;
 			}

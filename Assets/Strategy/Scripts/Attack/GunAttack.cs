@@ -16,6 +16,9 @@ namespace Strategy {
 		}
 		
 		protected override void Attack(Unit target) {
+			if (unit.Debug) {
+				Debug.Log($"{gameObject.name} Fire");
+			}
 			gunController.Fire();
 		}
 	}

@@ -9,7 +9,7 @@ using MEC;
 namespace Strategy {
 	
 	public class AttackState : UnitState
-	{	
+	{
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{

@@ -32,7 +32,7 @@ namespace Strategy {
 					target = null;
 				}
 				else {
-					float d = Util.XZDistance(target.transform.position,
+					float d = Util.XZDistance(target.NavBody.position,
 						unit.NavBody.position);
 					if (d >= attackMaxRadius) {
 						target = null;

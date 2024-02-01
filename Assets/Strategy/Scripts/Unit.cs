@@ -40,6 +40,8 @@ namespace Strategy {
 		[SerializeField]
 		private int teamId = 0;
 		
+		public bool Debug = false;
+		
 		public int TeamId => teamId;
 		
 		public Vector3 Destination { get; set; }
