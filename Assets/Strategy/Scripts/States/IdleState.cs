@@ -12,8 +12,8 @@ namespace Strategy {
 		protected void OnEnable()
 		{
 			unit.StopAgent();
-			if (unit.idleClip != null) {
-				animancer.Play(unit.idleClip);
+			if (unit.config.idleClip != null) {
+				animancer.Play(unit.config.idleClip);
 			}
 		}
 		

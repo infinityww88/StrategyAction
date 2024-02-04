@@ -4,20 +4,31 @@ using UnityEngine;
 using ProjectDawn.Navigation.Hybrid;
 using ProjectDawn.Navigation;
 
-[CreateAssetMenu(menuName="Strategy/UnitConfig", fileName="UnitConfig", order=-1)]
-public class UnitConfig : ScriptableObject
-{
-	public float maxHp;
-	public float skillCD;
-	public float attackPoint;
+namespace Strategy {
 	
-	public float refreshTargetInterval;
+	[CreateAssetMenu(menuName="Strategy/UnitConfig", fileName="UnitConfig", order=-1)]
+	public class UnitConfig : ScriptableObject
+	{
+		public float maxHp = 100;
+		public float attackPoint = 10;
+		public float chaseMinRadius = 0;
+		public float chaseMaxRadius = 20;
 	
-	public int findEnemiesPolicy;
+		public float stuckPosDelta = 1f;
+		public float reachRadius = 0.2f;
+		public float targetUpdateInterval = 0.5f;
+		public float stuckMonitorInterval = 5f;
 	
-	public AnimationClip idleClip;
-	public AnimationClip moveClip;
-	//public AnimationClip attackClip;
-	//public AnimationClip skillClip;
-	public AnimationClip deadClip;
+		public float refreshTargetInterval = 1;
+	
+		public float attackSpeed = 1;
+		public UnitLayer attackLayers;
+		public UnitLayer unitLayer;
+	
+		public AnimationClip idleClip;
+		public AnimationClip moveClip;
+		public AnimationClip attackClip;
+		public AnimationClip deadClip;
+	}
 }
+

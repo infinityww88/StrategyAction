@@ -5,23 +5,30 @@ using Sirenix.OdinInspector;
 using ProjectDawn.Navigation.Hybrid;
 using Animancer;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Strategy  {
 	
 	public class TestUnit : MonoBehaviour
 	{
-		public Unit unit;
-		public Transform target;
-		public GameObject unitPrefab;
+		[OnValueChanged("OnAgentChange")]
+		public float radius;
 		
-		[Button]
-		private void Move() {
-			unit.SetMoveTarget(target.position);
+		public AgentCylinderShapeAuthoring agentShape;
+		
+		#if UNITY_EDITOR
+		private void OnAgentChange() {
+			SerializedObject so = new SerializedObject(agentShape);
+			SerializedProperty r = so.FindProperty("Radius");
+			r.floatValue = radius;
+			so.ApplyModifiedProperties();
 		}
+		#endif
 		
-		[Button]
-		private void Spawn() {
-			var unit = Instantiate(unitPrefab, target.position, target.rotation);
-			GameController.Instance.AddUnit(unit.GetComponent<Unit>());
+		void Attack() {
+			
 		}
 	}
 }

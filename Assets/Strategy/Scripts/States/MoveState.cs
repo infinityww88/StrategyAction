@@ -10,19 +10,14 @@ namespace Strategy {
 	
 	public class MoveState : UnitState
 	{
-		public float stuckPosDelta = 1f;
-		public float reachRadius = 0.2f;
-		public float targetUpdateInterval = 0.5f;
-		public float stuckMonitorInterval = 5f;
-		
 		private CoroutineHandle targetUpadteHandle;
 		private CoroutineHandle stuckMonitorHandle;
 		
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{
-			if (unit.moveClip != null) {
-				animancer.Play(unit.moveClip);
+			if (unit.config.moveClip != null) {
+				animancer.Play(unit.config.moveClip);
 			}
 			targetUpadteHandle = Timing.RunCoroutine(MoveToTarget().CancelWith(gameObject));
 			stuckMonitorHandle = Timing.RunCoroutine(MonitorStuck().CancelWith(gameObject));
@@ -43,14 +38,14 @@ namespace Strategy {
 				dest = unit.TargetPos;
 				unit.SetDestination(dest);
 				
-				yield return Timing.WaitForSeconds(targetUpdateInterval);
+				yield return Timing.WaitForSeconds(unit.config.targetUpdateInterval);
 			}
 		}
 		
 		private IEnumerator<float> MonitorStuck() {
 			while (true) {
-				yield return Timing.WaitForSeconds(stuckMonitorInterval);
-				if (Util.XZDistance(unit.NavBody.transform.position, dest) < stuckPosDelta) {
+				yield return Timing.WaitForSeconds(unit.config.stuckMonitorInterval);
+				if (Util.XZDistance(unit.NavBody.transform.position, dest) < unit.config.stuckPosDelta) {
 					Debug.Log($"clear move: stuck {unit.NavBody.transform.position} {dest}");
 					unit.ClearMoveTarget();
 					break;

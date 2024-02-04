@@ -13,6 +13,8 @@ namespace Strategy {
 		public float attackMaxRadius;
 		protected CoroutineHandle attackCoroHandle;
 		
+		public bool debug = false;
+		
 		public string DebugInfo() {
 			return $"target {target}, corohandle {attackCoroHandle.IsRunning}";
 		}
@@ -27,7 +29,7 @@ namespace Strategy {
 				transform.position,
 				attackMinRadius,
 				attackMaxRadius,
-				unit.attackLayers);
+				unit.config.attackLayers);
 		}
 		
 		protected bool TargetIsValid(Unit target) {
@@ -45,6 +47,9 @@ namespace Strategy {
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
 		protected void OnDrawGizmosSelected()
 		{
+			if (!debug) {
+				return;
+			}
 			DebugExtension.DrawCircle(transform.position, Vector3.up, Color.HSVToRGB(0, 0.7f, 1), attackMinRadius);
 			DebugExtension.DrawCircle(transform.position, Vector3.up, Color.HSVToRGB(0, 1, 1), attackMaxRadius);
 			if (TargetIsValid(target)) {
@@ -64,14 +69,6 @@ namespace Strategy {
 		
 		protected virtual IEnumerator<float> AttackCoro() {
 			yield break;
-		}
-		
-		// Update is called every frame, if the MonoBehaviour is enabled.
-		protected void Update()
-		{
-			if (unit.Debug) {
-				ConsoleProDebug.Watch($"{unit.gameObject.name} {this}", $"{DebugInfo()}");
-			}
 		}
 	}
 

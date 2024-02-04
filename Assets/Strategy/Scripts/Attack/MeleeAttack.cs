@@ -57,7 +57,7 @@ namespace Strategy {
 						idle = true;
 						if (idleState == null) {
 							attackState = null;
-							idleState = animancer.Play(unit.idleClip);
+							idleState = animancer.Play(unit.config.idleClip);
 						}
 					}
 					yield return Timing.WaitForOneFrame;

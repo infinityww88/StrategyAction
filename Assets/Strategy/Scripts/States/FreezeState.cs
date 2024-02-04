@@ -15,8 +15,8 @@ namespace Strategy {
 		{
 			startTime = Time.time;
 			unit.StopAgent();
-			if (unit.idleClip) {
-				animancer.Play(unit.idleClip);
+			if (unit.config.idleClip) {
+				animancer.Play(unit.config.idleClip);
 			}
 		}
 

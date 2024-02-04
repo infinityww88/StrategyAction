@@ -17,7 +17,7 @@ namespace Strategy {
 		protected virtual void Attack(Unit target) {
 			
 		}
-		
+	
 		protected override IEnumerator<float> AttackCoro() {
 			while (true) {
 				if (hasCD) {
@@ -33,11 +33,11 @@ namespace Strategy {
 					continue;
 				}
 				
-				if (Util.GetLookAtAngle(transform, target.NavBody.transform) > lookAtAngleThreshold) {
+				if (Util.GetLookAtAngle(transform, target.Body) > lookAtAngleThreshold) {
 					yield return Timing.WaitUntilDone(Util.LookAtTarget(transform,
 						target.Body,
 						lookAtAngleThreshold,
-						lookAtLerpFactor));
+						lookAtLerpFactor).KillWith(Timing.CurrentCoroutine));
 				}
 				
 				Attack(target);

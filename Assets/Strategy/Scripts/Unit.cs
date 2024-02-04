@@ -8,6 +8,8 @@ using DG.Tweening;
 using System;
 using System.Linq;
 using MEC;
+using Sirenix.OdinInspector;
+using Animancer;
 
 namespace Strategy {
 	
@@ -21,22 +23,8 @@ namespace Strategy {
 	
 	public class Unit : MonoBehaviour
 	{
-		//public UnitConfig config;
-		[SerializeField]
-		private float maxHP;
-		
-		public AnimationClip idleClip = null;
-		public AnimationClip moveClip = null;
-		public AnimationClip attackClip = null;
-		public AnimationClip deadClip = null;
-		
-		public float refreshTargetInterval = 1f;
-		
-		[SerializeField]
-		private float chaseRadius;
-		
-		[SerializeField]
-		private float chaseMinRadius;
+		[InlineEditor]
+		public UnitConfig config;
 		
 		private AgentAuthoring agent;
 		
@@ -59,9 +47,9 @@ namespace Strategy {
 		
 		private UnitState currState = null;
 		
-		public float ChaseRadius => TeamId == 0 ? 1000 : chaseRadius;
+		public float ChaseMaxRadius => TeamId == 0 ? 1000 : config.chaseMaxRadius;
 		
-		public float ChaseMinRadius => chaseMinRadius;
+		public float ChaseMinRadius => config.chaseMinRadius;
 		
 		private IdleState idleState;
 		private ChaseState chaseState;
@@ -69,8 +57,6 @@ namespace Strategy {
 		private AttackState attackState;
 		private MoveState moveState;
 		private FreezeState freezeState;
-		
-		public float attackSpeed = 1;
 
 		private List<Unit> enemiesInChaseRange = new List<Unit>();
 		
@@ -81,15 +67,12 @@ namespace Strategy {
 		
 		public float hp;
 		
-		public float stuckPosDelta = 0.5f;
-		
-		public UnitLayer attackLayers;
-		public UnitLayer unitLayer;
-		
 		private CoroutineHandle alignVelocityHandle;
 		private CoroutineHandle alignPositionHandle;
 		
 		private BaseAttack[] attackBehaviors;
+		
+		public bool debug = false;
 		
 		public IEnumerable<BaseAttack> AttackBehaviors => attackBehaviors;
 	
@@ -159,9 +142,9 @@ namespace Strategy {
 				Util.GetUnits(
 				NavBody.transform.position,
 				ChaseMinRadius,
-				ChaseRadius,
+				ChaseMaxRadius,
 				Util.EnemyTeamId(TeamId),
-				attackLayers));
+				config.attackLayers));
 		}
 		
 		void SwitchState(UnitState newState) {
@@ -185,6 +168,10 @@ namespace Strategy {
 		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
 		protected void OnDrawGizmosSelected()
 		{
+			if (!debug || config == null) {
+				return;
+			}
+			
 			var center = NavBody == null ? transform.position : NavBody.position;
 			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
 				Vector3.up,
@@ -193,7 +180,7 @@ namespace Strategy {
 			DebugExtension.DrawCircle(center + Vector3.one * 0.2f,
 				Vector3.up,
 				Color.HSVToRGB(0.5f, 1, 1),
-				ChaseRadius);
+				ChaseMaxRadius);
 		}
 		
 		public void ShowSelectCircle(bool show) {
@@ -203,7 +190,7 @@ namespace Strategy {
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
 		protected void Start()
 		{
-			hp = maxHP;
+			hp = config.maxHp;
 			
 			alignVelocityHandle = Timing.RunCoroutine(Util.AlignAgentRotation(
 				Body, GetAgentVelocity, 0.2f).CancelWith(gameObject));
@@ -231,6 +218,25 @@ namespace Strategy {
 		}
 		
 		public bool InAttackAnimation { get; set; }
+		
+		#if UNITY_EDITOR
+		[Button]
+		void TestAnimation(int index = 0) {
+			if (body == null || index >= 4 || config == null) {
+				return;
+			}
+			AnimationClip clip = config.idleClip;
+			switch (index) {
+			case 1: clip = config.moveClip; break;
+			case 2: clip = config.attackClip; break;
+			case 3: clip = config.deadClip; break;
+			}
+			if (clip == null) {
+				return;
+			}
+			body.GetComponent<AnimancerComponent>().Play(clip);
+		}
+		#endif
 
 		void Update() {
 			

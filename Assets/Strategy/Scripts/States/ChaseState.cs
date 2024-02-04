@@ -15,8 +15,8 @@ namespace Strategy {
 		// This function is called when the object becomes enabled and active.
 		protected void OnEnable()
 		{
-			if (unit.moveClip != null) {
-				animancer.Play(unit.moveClip);
+			if (unit.config.moveClip != null) {
+				animancer.Play(unit.config.moveClip);
 			}
 			handle = Timing.RunCoroutine(SetTarget().CancelWith(gameObject));
 		}
@@ -27,7 +27,7 @@ namespace Strategy {
 		protected void OnDrawGizmosSelected()
 		{
 			if (unit != null && unit.NavBody != null) {
-				Gizmos.color = Color.green;
+				Gizmos.color = Color.HSVToRGB(0.25f, 1, 1);;
 				Gizmos.DrawLine(unit.NavBody.transform.position + Vector3.up * 0.1f, targetPos + Vector3.up * 0.1f);
 			}
 		}
@@ -38,7 +38,6 @@ namespace Strategy {
 			while (true) {
 				
 				target = GetTarget(target);
-			
 				Vector3 dest = unit.NavBody.position;
 				
 				if (target != null) {
@@ -61,7 +60,7 @@ namespace Strategy {
 			
 				unit.SetDestination(dest);
 	
-				yield return Timing.WaitForSeconds(unit.refreshTargetInterval);
+				yield return Timing.WaitForSeconds(unit.config.refreshTargetInterval);
 			}
 		}
 		
@@ -74,8 +73,8 @@ namespace Strategy {
 		
 		protected virtual Unit GetTarget(Unit currTarget) {
 			if (currTarget != null && !currTarget.IsDead) {
-				float d = Util.XZDistance(currTarget.transform.position, unit.NavBody.transform.position);
-				if (d >= unit.ChaseMinRadius && d < unit.ChaseRadius) {
+				float d = Util.XZDistance(currTarget.NavBody.position, unit.NavBody.transform.position);
+				if (d >= unit.ChaseMinRadius && d < unit.ChaseMaxRadius) {
 					return currTarget;
 				}
 			}
@@ -83,8 +82,8 @@ namespace Strategy {
 			var e = Util.GetNearestLiveEnemy(unit.TeamId,
 				unit.NavBody.position,
 				unit.ChaseMinRadius,
-				unit.ChaseRadius,
-				unit.attackLayers);
+				unit.ChaseMaxRadius,
+				unit.config.attackLayers);
 			
 			if (e != null) {
 				return e;

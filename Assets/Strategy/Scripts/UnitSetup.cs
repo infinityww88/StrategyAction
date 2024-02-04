@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 
 public class UnitSetup : MonoBehaviour
 {
-	public UnitConfig config;
+	public Strategy.UnitConfig config;
 	
 	[Button]
 	void Test(float speed) {

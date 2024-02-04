@@ -56,7 +56,7 @@ namespace Strategy {
 		{
 			return GameController.Instance.GetTeam(teamId)
 				.Where(e => {
-					if ((e.unitLayer & layers) == 0) {
+					if ((e.config.unitLayer & layers) == 0) {
 						return false;
 					}
 					float d = Util.XZDistance(e.NavBody.position, center);
@@ -159,7 +159,7 @@ namespace Strategy {
 			float angleThreshold,
 			float lerpFactor) {
 			while (true) {
-				var lookv = target.transform.position - self.position;
+				var lookv = target.position - self.position;
 				lookv.y = 0;
 				var forward = self.forward;
 				forward.y = 0;
@@ -169,7 +169,9 @@ namespace Strategy {
 				if (angle < angleThreshold)  {
 					break;
 				}
+				
 				lookv = Vector3.Lerp(forward, lookv, lerpFactor);
+				
 				self.LookAt(self.position + lookv, Vector3.up);
 				yield return Timing.WaitForOneFrame;
 			}

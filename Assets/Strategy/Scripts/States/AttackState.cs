@@ -14,6 +14,10 @@ namespace Strategy {
 		protected void OnEnable()
 		{
 			unit.StopAgent();
+			if (unit.config.attackClip == null) {
+				//TODO Human gun attack
+				animancer.Playable.PauseGraph();
+			}
 			foreach (var a in unit.AttackBehaviors) {
 				a.StartAttack();
 			}
@@ -22,6 +26,9 @@ namespace Strategy {
 		// This function is called when the behaviour becomes disabled () or inactive.
 		protected void OnDisable()
 		{
+			if (unit.config.attackClip == null) {
+				animancer.Playable.UnpauseGraph();
+			}
 			foreach (var a in unit.AttackBehaviors) {
 				a.StopAttack();
 			}

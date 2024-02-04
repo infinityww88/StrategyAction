@@ -12,8 +12,8 @@ namespace Strategy {
 		{
 			unit.StopAgent();
 			unit.EnableAgent(false);
-			if (unit.deadClip != null) {
-				animancer.Play(unit.deadClip);
+			if (unit.config.deadClip != null) {
+				animancer.Play(unit.config.deadClip);
 			}
 		}
 	
