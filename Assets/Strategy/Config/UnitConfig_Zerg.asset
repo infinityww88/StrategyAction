@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   attackPoint: 0
-  chaseMinRadius: 3.1
+  chaseMinRadius: 4.15
   chaseMaxRadius: 10.13
   stuckPosDelta: 1
   reachRadius: 0.2
@@ -22,8 +22,8 @@ MonoBehaviour:
   stuckMonitorInterval: 5
   refreshTargetInterval: 1
   attackSpeed: 1
-  attackLayers: 0
-  unitLayer: 0
+  attackLayers: 1
+  unitLayer: 1
   idleClip: {fileID: 7400000, guid: c50f777db5f8c8e4ebc25faab6c74261, type: 2}
   moveClip: {fileID: 7400000, guid: 9a55de757bdee924c87c79921564178f, type: 2}
   attackClip: {fileID: 7400000, guid: cdd7d31db97d799479d020bb46c88405, type: 2}

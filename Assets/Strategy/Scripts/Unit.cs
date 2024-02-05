@@ -37,8 +37,6 @@ namespace Strategy {
 		[SerializeField]
 		private int teamId = 0;
 		
-		public bool Debug = false;
-		
 		public int TeamId => teamId;
 		
 		public Vector3 Destination { get; set; }
@@ -218,25 +216,6 @@ namespace Strategy {
 		}
 		
 		public bool InAttackAnimation { get; set; }
-		
-		#if UNITY_EDITOR
-		[Button]
-		void TestAnimation(int index = 0) {
-			if (body == null || index >= 4 || config == null) {
-				return;
-			}
-			AnimationClip clip = config.idleClip;
-			switch (index) {
-			case 1: clip = config.moveClip; break;
-			case 2: clip = config.attackClip; break;
-			case 3: clip = config.deadClip; break;
-			}
-			if (clip == null) {
-				return;
-			}
-			body.GetComponent<AnimancerComponent>().Play(clip);
-		}
-		#endif
 
 		void Update() {
 			

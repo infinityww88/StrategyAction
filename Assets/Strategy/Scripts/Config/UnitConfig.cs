@@ -22,8 +22,8 @@ namespace Strategy {
 		public float refreshTargetInterval = 1;
 	
 		public float attackSpeed = 1;
-		public UnitLayer attackLayers;
-		public UnitLayer unitLayer;
+		public UnitLayer attackLayers = UnitLayer.Ground;
+		public UnitLayer unitLayer = UnitLayer.Ground;
 	
 		public AnimationClip idleClip;
 		public AnimationClip moveClip;

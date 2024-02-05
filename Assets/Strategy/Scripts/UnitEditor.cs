@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using ProjectDawn.Navigation.Hybrid;
 using ProjectDawn.Navigation;
 using System;
+using Animancer;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,7 +53,6 @@ namespace Strategy {
 		
 		float ReadSpeed() {
 			float v = ReadFloatProperty(GetSO<AgentAuthoring>(), "Speed");
-			Debug.Log($"read speed {v}");
 			return v;
 		}
 		
@@ -89,7 +89,6 @@ namespace Strategy {
 			SerializedObject so = new SerializedObject(obj);
 			foreach (var p in properties) {
 				SerializedProperty sp = so.FindProperty(p.Item1);
-				//sp.floatValue = p.Item2;
 				updateAction(sp, p.Item2);
 			}
 			so.ApplyModifiedProperties();
@@ -155,6 +154,34 @@ namespace Strategy {
 			DebugExtension.DrawCylinder(transform.position,
 				transform.position + Vector3.up * agentHeight,
 				Color.green, agentRadius);
+			Handles.Label(transform.position + Vector3.up * 2, $"Team");
+		}
+				
+		[Button]
+		void TestAnimation(int index = 0) {
+			Unit unit = GetComponent<Unit>();
+			if (unit == null) {
+				return;
+			}
+			var body = unit.Body;
+			var config = unit.config;
+			if (body == null || index >= 4 || config == null) {
+				return;
+			}
+			AnimationClip clip = config.idleClip;
+			switch (index) {
+			case 1: clip = config.moveClip; break;
+			case 2: clip = config.attackClip; break;
+			case 3: clip = config.deadClip; break;
+			}
+			if (clip == null) {
+				return;
+			}
+			var animancer = body.GetComponent<AnimancerComponent>();
+			var s = body.GetComponent<AnimancerComponent>().Play(clip);
+			s.Events.OnEnd = () => {
+				animancer.Stop();
+			};
 		}
 		
 		#endif
