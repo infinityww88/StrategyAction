@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Casual/UI/Play.uss?fileID=7433441132597879392&amp;guid=032fed0df3c38af4a9e8a4a615570df3&amp;type=3#Play" />
+    <ui:VisualElement style="flex-grow: 0; height: 200px;" />
+    <ui:VisualElement name="Head" class="head" style="margin-top: 0; margin-right: 0; margin-bottom: 144px; margin-left: 0;">
+        <ui:VisualElement name="VisualElement" class="TaskCard" style="flex-grow: 0; flex-shrink: 0; background-image: url(&apos;project://database/Assets/Casual/Textures/Gun_1_M.png?fileID=2800000&amp;guid=4f1f014c712f94e48bf4a2e668816718&amp;type=3#Gun_1_M&apos;);" />
+        <ui:VisualElement name="VisualElement" class="TaskCard" style="flex-grow: 0; flex-shrink: 0; left: 50px; background-image: url(&apos;project://database/Assets/Casual/Textures/Gun_5_M.png?fileID=2800000&amp;guid=5408a49154c94e64282ce511e0ea0522&amp;type=3#Gun_5_M&apos;);" />
+        <ui:VisualElement name="VisualElement" class="TaskCard" style="flex-grow: 0; flex-shrink: 0; left: 100px; background-image: url(&apos;project://database/Assets/Casual/Textures/Gun_11_M.png?fileID=2800000&amp;guid=d90a5d6df5739a248adef957e2eb3190&amp;type=3#Gun_11_M&apos;);" />
+        <ui:VisualElement name="VisualElement" class="TaskCard" style="flex-grow: 0; flex-shrink: 0; left: 150px; background-image: url(&apos;project://database/Assets/Casual/Textures/Gun_15_M.png?fileID=2800000&amp;guid=6fa00e083680dba4583835c89b2626fc&amp;type=3#Gun_15_M&apos;);" />
+        <ui:VisualElement name="TestElement" style="height: 300px; width: 300px;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="GamePlayViewPort" class="body" />
+    <ui:VisualElement name="Foot" class="foot">
+        <ui:Button text="Blow" name="BlowButton" class="button" style="font-size: 40px;" />
+    </ui:VisualElement>
+</ui:UXML>

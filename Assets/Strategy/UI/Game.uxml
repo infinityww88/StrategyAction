@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Strategy/UI/Game.uss?fileID=7433441132597879392&amp;guid=c7bcdb9ef9678b748bf4d613e3601f26&amp;type=3#Game" />
-    <ui:VisualElement name="Root" style="flex-grow: 1;">
-        <ui:VisualElement name="SelectRect" style="flex-grow: 1; position: absolute; left: 53px; top: auto; width: 200px; height: 200px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgba(243, 243, 243, 0.78); border-right-color: rgba(243, 243, 243, 0.78); border-top-color: rgba(243, 243, 243, 0.78); border-bottom-color: rgba(243, 243, 243, 0.78); bottom: 114px; display: none;" />
-    </ui:VisualElement>
-</ui:UXML>

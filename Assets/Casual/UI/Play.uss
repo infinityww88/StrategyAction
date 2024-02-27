@@ -1,0 +1,48 @@
+.TaskCard {
+    position: absolute;
+    background-color: rgb(133, 128, 122);
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    border-left-color: rgb(164, 226, 133);
+    border-right-color: rgb(164, 226, 133);
+    border-top-color: rgb(164, 226, 133);
+    border-bottom-color: rgb(164, 226, 133);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    width: 300px;
+    height: 300px;
+    display: none;
+}
+
+.TaskCardList {
+    margin-top: 247px;
+}
+
+.button {
+    width: 300px;
+    height: 100px;
+}
+
+.foot {
+}
+
+.body {
+    flex-grow: 1;
+}
+
+.head {
+    height: 300px;
+    margin-top: 168px;
+    margin-bottom: 100px;
+}
+
+.foot {
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(79, 79, 79, 0.41);
+}
