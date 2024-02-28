@@ -21,6 +21,9 @@ namespace ModelMatch {
 		private Dictionary<int, ComponentData> compMaskMap;
 		private Material solidMat;
 		
+		public Texture m_FrontTex;
+		public Texture m_BackTex;
+		
 		public float lerpFactor = 0.2f;
 		
 		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.

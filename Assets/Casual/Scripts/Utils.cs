@@ -9,6 +9,11 @@ using DG.Tweening;
 using MEC;
 using UnityEngine.UIElements;
 using UnityEngine.Assertions;
+using QFSW.QC;
+using UnityEngine.Networking;
+using Sirenix.OdinInspector;
+using System.Threading.Tasks;
+using XLua;
 
 using Random = UnityEngine.Random;
 
@@ -67,6 +72,14 @@ public static class Utils
 			out Vector3 rb);
 		Assert.IsTrue(intersect);
 		return new Vector4(lb.x, rt.x, rt.z, lb.z);
+	}
+	
+	public static Vector3 GetCameraRayPos(Camera camera, Vector3 worldPos, Plane plane) {
+		Ray ray = new Ray(worldPos, camera.transform.forward);
+		float distance = 0;
+		bool hit = plane.Raycast(ray, out distance);
+		Assert.IsTrue(hit);
+		return ray.GetPoint(distance);
 	}
 	
 	public static bool GetCameraZPlane(Camera camera, Rect viewPort, Plane plane,
@@ -163,5 +176,23 @@ public static class Utils
 		File.WriteAllBytes(path, data);
 		camera.targetTexture = null;
 		RenderTexture.active = t;
+	}
+	
+	[Command]
+	public static async void RunLua(string fileName) {
+		string result = await DownloadText(fileName);
+		LuaEnv env = new LuaEnv();
+		env.DoString(result);
+		env.Dispose();
+	}
+	
+	public static async Task<string> DownloadText(string fileName) {
+		UnityWebRequest req = UnityWebRequest.Get($"http://localhost:7777/{fileName}");
+		await req.SendWebRequest();
+		if (req.result != UnityWebRequest.Result.Success) {
+			throw new Exception($"download failed {req.error} {req.result}");
+		}
+		return req.downloadHandler.text;
+		//Debug.Log($"Download {req.downloadHandler.text}");
 	}
 }

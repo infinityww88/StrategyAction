@@ -316,11 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f21ea3281786ea44880d9630253e887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 829159278}
-  leftBottom: {fileID: 538228162}
-  leftTop: {fileID: 575456985}
-  rightTop: {fileID: 1776780711}
-  rightBottom: {fileID: 30495564}
+  rt: {fileID: 0}
 --- !u!1 &829159274
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +329,7 @@ GameObject:
   - component: {fileID: 829159277}
   - component: {fileID: 829159276}
   - component: {fileID: 829159275}
+  - component: {fileID: 829159279}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -421,13 +418,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829159274}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1745534, y: -0, z: -0, w: 0.98464775}
+  m_LocalRotation: {x: -0.087276764, y: -0.85272974, z: -0.15116763, w: -0.49232408}
   m_LocalPosition: {x: 0, y: -2.4374723, z: -0.60937786}
   m_LocalScale: {x: 1.364929, y: 1.3649288, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &829159279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829159274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce309e7ad65e4b42bad763fc2a0edbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  luaCode: {fileID: 4900000, guid: 3101a066e3878af4e8ab0027c53da170, type: 3}
+  chunkName: Test
+  goName: Cube
 --- !u!1 &956826086
 GameObject:
   m_ObjectHideFlags: 0

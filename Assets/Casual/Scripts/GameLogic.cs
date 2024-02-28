@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using ScriptableObjectArchitecture;
 using System.Linq;
 using MEC;
+using QFSW.QC;
 
 using Random = UnityEngine.Random;
 
@@ -16,18 +17,26 @@ namespace ModelMatch {
 		
 		public Transform ComponentsRoot;
 		public Transform TaskRoot;
+		public Transform TaskPivot;
 		
 		public Material solidMaterial;
 		
 		public float m_AreaMargin = 0.5f;
 		
 		public LevelData m_Level;
+		public PrefabTexData m_PrefabTaxMap;
+		public GameObject m_Card;
 		
 		private List<Task> tasks = new	List<Task>();
 		private Task currTask = null;
 		
 		public int oneLayerNum = 10;
 		public float heightStep = 1f;
+		public RectTransform rootPanel;
+		
+		#region debug command
+		
+		#endregion
 		
 		[Button]
 		private void InitLevel() {
@@ -36,17 +45,34 @@ namespace ModelMatch {
 			InitComponents();
 		}
 		
-		// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
-		protected void Start()
+		[Button]
+		void CanvasInfo() {
+			Debug.Log($"{Camera.main.pixelRect}");
+		}
+		
+		void SetCardImage(GameObject prefab, Texture frontTex, Texture backTex) {
+			var renderer = m_Card.GetComponent<MeshRenderer>();
+			renderer.materials[1].SetTexture("_BaseMap", frontTex);
+			renderer.materials[2].SetTexture("_BaseMap", backTex);
+		}
+		
+		protected IEnumerator Start()
 		{
-			Timing.CallDelayed(0.1f, () => {
-				InitLevel();
-				NextTask();
-			});
+			var offY =  Screen.safeArea.y;
+			var off = rootPanel.offsetMax;
+			off.y = -offY;
+			rootPanel.offsetMax = off;
+			
+			yield return new WaitForSeconds(0.2f);
+			wallController.AlignWalls();
+			TaskRoot.position = TaskPivot.position;
+			yield return 0;
+			InitLevel();
+			NextTask();
 		}
 	
 		[Button]
-		void Blow() {
+		public void Blow() {
 			var compRigids = ComponentsRoot.GetComponentsInChildren<Rigidbody>();
 			foreach (var body in compRigids) {
 				var xz = UnityEngine.Random.insideUnitCircle;
@@ -99,11 +125,13 @@ namespace ModelMatch {
 				return currTask;
 			}
 			currTask = tasks.First();
+			SetCardImage(currTask.gameObject, currTask.m_FrontTex, currTask.m_BackTex);
 			currTask.gameObject.SetActive(true);
 			currTask.transform.localPosition = Vector3.zero;
 			currTask.transform.localRotation = Quaternion.identity;
 			currTask.transform.localScale = Vector3.one;
-			currTask.transform.SetParent(TaskRoot, false);
+			currTask.transform.SetParent(TaskRoot);
+			currTask.transform.position = TaskPivot.position;
 			currTask.Begin();
 			
 			return currTask;
@@ -114,7 +142,9 @@ namespace ModelMatch {
 				var prefab = item.m_Model;
 				for (int i = 0; i < item.m_Num; i++) {
 					var taskObj = Instantiate(prefab, TaskRoot);
-					tasks.Add(taskObj.AddComponent<Task>());
+					var task = taskObj.AddComponent<Task>();
+					task.m_FrontTex = task.m_BackTex = m_PrefabTaxMap.map[prefab];
+					tasks.Add(task);
 					taskObj.SetActive(false);
 				}
 			});
@@ -174,32 +204,6 @@ namespace ModelMatch {
 			}
 		}
 		
-		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
-		protected void OnDrawGizmos()
-		{
-			if (wallController != null) {
-				Vector4 area = wallController.GetPlayArea();
-				float l = area.x + m_AreaMargin,
-					r = area.y - m_AreaMargin,
-					t = area.z - m_AreaMargin,
-					b = area.w + m_AreaMargin;
-				Vector3 pos = new Vector3((l + r) / 2, transform.position.y, (t + b) / 2);
-				DebugExtension.DrawBounds(new Bounds(pos,
-					new Vector3(Mathf.Abs(r - l), 0.01f, Mathf.Abs(t - b))));
-			}
-			
-			if (Utils.GetCameraZPlane(Camera.main,
-				new Rect(0, 0, 1, 1),
-				new Plane(Vector3.up, Vector3.zero),
-				out Vector3 lb,
-				out Vector3 lt,
-				out Vector3 rt,
-				out Vector3 rb)) {
-				float l = lb.x, r = rt.x, t = rt.z, b = lb.z;
-				DebugExtension.DrawBounds(new Bounds(new Vector3((l + r) / 2, 0, (t + b) / 2),
-					new Vector3(Mathf.Abs(r - l), 0.01f, Mathf.Abs(t - b))), Color.red);
-				}
-		}
 	}
 }
 

@@ -5,33 +5,28 @@ using Sirenix.OdinInspector;
 
 public class CanvasInfo : MonoBehaviour
 {
-	public Transform target;
-	
-	public Transform leftBottom;
-	public Transform leftTop;
-	public Transform rightTop;
-	public Transform rightBottom;
-	
-	// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
-	protected IEnumerator Start()
-	{
-		yield return 0;
-		Info();
-	}
+	public RectTransform rt;
     
 	[Button]
 	void Info() {
-		var pos = (leftBottom.position + rightTop.position) / 2;
-		target.position = pos;
-		var width = (rightBottom.position - leftBottom.position).magnitude;
-		var height = (leftTop.position - leftBottom.position).magnitude;
-		target.localScale = new Vector3(width, height, 1);
-		target.rotation = transform.rotation;
+		
+	}
+	
+	// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
+	protected void OnDrawGizmos()
+	{
+		if (rt == null) {
+			return;
+		}
+		Vector3[] corners = new Vector3[4];
+		rt.GetWorldCorners(corners);
+		corners.Foreach(p => {
+			Gizmos.DrawSphere(p, 0.2f);
+		});
 	}
 
     // Update is called once per frame
     void Update()
     {
-	    Info();
     }
 }
