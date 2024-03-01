@@ -3,31 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UIElements;
-using XLua;
+using DG.Tweening;
 
 namespace ModelMatch {
 	
 	public class Test : MonoBehaviour
 	{
-		public TextAsset luaCode;
-		public string chunkName;
-		public string goName;
+		public Transform target;
+		public float duration = 10;
+		private Tween tween = null;
 		
 		[Button]
 		public void RunCode() {
-			var o = GameObject.Find(goName);
-			if (o != null) {
-				LuaMonoBehaviour.BehaviourScript = luaCode.text;
-				LuaMonoBehaviour.BehaviourScriptName = chunkName;
-				o.AddComponent<LuaMonoBehaviour>();
-				LuaMonoBehaviour.BehaviourScript = "";
-				LuaMonoBehaviour.BehaviourScriptName = "";
-			}
+			tween = transform.DOMove(target.position, duration).SetLoops(-1, LoopType.Yoyo);
 		}
 		
 		[Button]
-		public void Info() {
-			Debug.Log(LuaMonoBehaviour.BehaviourScript);
+		public void Hold() {
+			if (tween != null) {
+				if (tween.timeScale == 0) {
+					tween.timeScale = 1;
+				} else {
+					tween.timeScale = 0;
+				}
+			}
 		}
 	}
 }

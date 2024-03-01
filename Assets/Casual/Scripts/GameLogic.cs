@@ -4,7 +4,6 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using ScriptableObjectArchitecture;
 using System.Linq;
-using MEC;
 using QFSW.QC;
 
 using Random = UnityEngine.Random;
@@ -190,13 +189,23 @@ namespace ModelMatch {
 			});
 		}
 		
+		// Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.
+		protected void OnDrawGizmos()
+		{
+			Vector4 area = wallController.GetPlayArea();
+			Bounds bound = new Bounds(new Vector3((area.x + area.y) / 2, 0, (area.z + area.w) / 2),
+				new Vector3(area.y - area.x - 2 * m_AreaMargin, 0.01f, area.z - area.w - 2 * m_AreaMargin));
+			
+			DebugExtension.DrawBounds(bound, Color.green);
+		}
+		
 		IEnumerator<Vector3> SpreadPosGenerator(int oneLayerNum, float heightStep) {
 			Vector4 area = wallController.GetPlayArea();
 			float y = 0;
 			while (true) {
 				for (int j = 0; j < oneLayerNum; j++) {
-					float x = Random.Range(area.x, area.y);
-					float z = Random.Range(area.w, area.z);
+					float x = Random.Range(area.x + m_AreaMargin, area.y - m_AreaMargin);
+					float z = Random.Range(area.z - m_AreaMargin, area.w + m_AreaMargin);
 					Vector3 pos = new Vector3(x, y, z) + transform.position;
 					yield return pos;
 				}

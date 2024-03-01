@@ -6,19 +6,21 @@ using System.IO;
 using System.Linq;
 using ScriptableObjectArchitecture;
 using DG.Tweening;
-using MEC;
 using UnityEngine.UIElements;
 using UnityEngine.Assertions;
 using QFSW.QC;
 using UnityEngine.Networking;
 using Sirenix.OdinInspector;
-using System.Threading.Tasks;
-using XLua;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 using Random = UnityEngine.Random;
 
 public static class Utils
 {
+	[Command("SetIp")]
+	static string ip = "192.168.0.102";
+	
 	public static void Foreach<T>(this IEnumerable<T> array, Action<T> action) {
 		foreach (var e in array) {
 			action(e);
@@ -178,16 +180,8 @@ public static class Utils
 		RenderTexture.active = t;
 	}
 	
-	[Command]
-	public static async void RunLua(string fileName) {
-		string result = await DownloadText(fileName);
-		LuaEnv env = new LuaEnv();
-		env.DoString(result);
-		env.Dispose();
-	}
-	
-	public static async Task<string> DownloadText(string fileName) {
-		UnityWebRequest req = UnityWebRequest.Get($"http://localhost:7777/{fileName}");
+	public static async UniTask<string> DownloadText(string fileName) {
+		UnityWebRequest req = UnityWebRequest.Get($"http://{ip}:7777/{fileName}");
 		await req.SendWebRequest();
 		if (req.result != UnityWebRequest.Result.Success) {
 			throw new Exception($"download failed {req.error} {req.result}");
